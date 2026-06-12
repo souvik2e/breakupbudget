@@ -4,806 +4,289 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>BreakupBudget — How Much Did Love Cost You?</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-<style>
-:root{--cream:#F5EFE6;--dark:#1A0A0A;--red:#C0392B;--rl:#E74C3C;--gold:#D4A017;--grey:#8B7B7B;--white:#FEFEFE}
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{background:var(--dark);color:var(--cream);font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden;cursor:none}
-.cur{width:14px;height:14px;background:var(--red);border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:9999;mix-blend-mode:difference;transition:transform .1s}
-.cur-r{width:36px;height:36px;border:1.5px solid var(--cream);border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:9998;transition:all .15s;opacity:.5}
-/* HERO */
-.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 20px;position:relative;overflow:hidden}
-.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 80% 50% at 50% 0%,rgba(192,57,43,.15),transparent 70%),var(--dark)}
-.fh{position:absolute;opacity:.06;animation:floatUp linear infinite;pointer-events:none}
-@keyframes floatUp{0%{transform:translateY(100vh) rotate(0deg);opacity:0}10%{opacity:.06}90%{opacity:.06}100%{transform:translateY(-100px) rotate(360deg);opacity:0}}
-.badge{display:inline-flex;align-items:center;gap:6px;background:rgba(192,57,43,.15);border:1px solid rgba(192,57,43,.4);border-radius:100px;padding:6px 16px;font-size:12px;font-family:'Space Mono',monospace;color:var(--rl);letter-spacing:.05em;margin-bottom:28px;position:relative;z-index:2;animation:fiu .6s ease both}
-.bdot{width:6px;height:6px;background:var(--rl);border-radius:50%;animation:pulse 1.5s ease infinite}
-@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
-.hero h1{font-family:'Playfair Display',serif;font-size:clamp(52px,10vw,110px);font-weight:900;line-height:.9;position:relative;z-index:2;animation:fiu .8s ease .2s both}
-.hero h1 .l1{display:block;color:var(--cream)}
-.hero h1 .l2{display:block;color:var(--red);font-style:italic;text-shadow:0 0 80px rgba(192,57,43,.5)}
-.hero-sub{font-size:clamp(15px,2vw,18px);color:var(--grey);margin-top:24px;max-width:460px;line-height:1.6;font-weight:300;position:relative;z-index:2;animation:fiu .8s ease .4s both}
-.hero-cta{margin-top:40px;position:relative;z-index:2;animation:fiu .8s ease .6s both}
-.btn-p{display:inline-flex;align-items:center;gap:10px;background:var(--red);color:var(--white);font-family:'Space Mono',monospace;font-size:14px;font-weight:700;padding:16px 36px;border-radius:100px;border:none;cursor:none;text-decoration:none;transition:all .2s;box-shadow:0 0 40px rgba(192,57,43,.4)}
-.btn-p:hover{background:var(--rl);transform:translateY(-2px)}
-.hero-stats{display:flex;gap:40px;margin-top:60px;position:relative;z-index:2;animation:fiu .8s ease .8s both}
-.hstat{text-align:center}
-.hstat-n{font-family:'Playfair Display',serif;font-size:28px;font-weight:700;color:var(--cream)}
-.hstat-l{font-size:11px;color:var(--grey);font-family:'Space Mono',monospace;margin-top:2px}
-.hdiv{width:1px;background:rgba(255,255,255,.1);align-self:stretch}
-/* CALC */
-#calculator{padding:80px 20px;max-width:680px;margin:0 auto}
-.eyebrow{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.15em;color:var(--rl);text-transform:uppercase;margin-bottom:12px;text-align:center}
-.sec-title{font-family:'Playfair Display',serif;font-size:clamp(32px,5vw,48px);font-weight:700;text-align:center;color:var(--cream);margin-bottom:48px;line-height:1.2}
-.sec-title em{color:var(--red);font-style:italic}
-.calc-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:24px;padding:40px;position:relative;overflow:hidden}
-.calc-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(192,57,43,.5),transparent)}
-.fl{display:flex;align-items:center;gap:8px;font-size:13px;font-family:'Space Mono',monospace;color:var(--grey);letter-spacing:.05em;margin-bottom:10px;text-transform:uppercase}
-.fi{width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:14px 18px;color:var(--cream);font-family:'DM Sans',sans-serif;font-size:16px;outline:none;transition:all .2s;cursor:none}
-.fi:focus{border-color:rgba(192,57,43,.5);background:rgba(192,57,43,.05);box-shadow:0 0 0 3px rgba(192,57,43,.1)}
-.fi::placeholder{color:rgba(255,255,255,.2)}
-.fg{margin-bottom:28px}
-.fr{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.rw{position:relative}
-.ri{width:100%;-webkit-appearance:none;appearance:none;height:4px;background:rgba(255,255,255,.1);border-radius:100px;outline:none;cursor:none;margin-top:8px}
-.ri::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;background:var(--red);border-radius:50%;cursor:none;box-shadow:0 0 10px rgba(192,57,43,.5)}
-.rv{position:absolute;right:0;top:-4px;font-family:'Space Mono',monospace;font-size:13px;color:var(--rl)}
-.div-l{height:1px;background:rgba(255,255,255,.06);margin:32px 0}
-.calc-btn{width:100%;padding:18px;background:linear-gradient(135deg,var(--red),#8B1A1A);color:var(--white);font-family:'Playfair Display',serif;font-size:20px;font-style:italic;font-weight:700;border:none;border-radius:14px;cursor:none;transition:all .3s;box-shadow:0 8px 30px rgba(192,57,43,.4)}
-.calc-btn:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(192,57,43,.6)}
-/* RESULT */
-#result{display:none;padding:0 20px 40px;max-width:680px;margin:0 auto;animation:revealUp .8s cubic-bezier(.16,1,.3,1) both}
-@keyframes revealUp{from{opacity:0;transform:translateY(40px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
-.rc{background:linear-gradient(135deg,rgba(192,57,43,.12),rgba(26,10,10,.8));border:1px solid rgba(192,57,43,.3);border-radius:24px;padding:48px 40px;text-align:center;position:relative;overflow:hidden}
-.rc::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(ellipse at center,rgba(192,57,43,.08),transparent 60%);animation:rotateBg 8s linear infinite}
-@keyframes rotateBg{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
-.verdict{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.2em;color:var(--rl);text-transform:uppercase;margin-bottom:16px;position:relative;z-index:2}
-.amount{font-family:'Playfair Display',serif;font-size:clamp(56px,12vw,96px);font-weight:900;color:var(--cream);line-height:1;position:relative;z-index:2;text-shadow:0 0 60px rgba(192,57,43,.4)}
-.amt-sub{font-size:16px;color:var(--grey);margin-top:8px;position:relative;z-index:2;font-weight:300}
-.roast-box{margin-top:32px;padding:24px;background:rgba(0,0,0,.3);border-radius:16px;font-family:'Playfair Display',serif;font-size:clamp(15px,2.5vw,19px);font-style:italic;color:var(--cream);line-height:1.6;position:relative;z-index:2;border-left:3px solid var(--red);text-align:left}
-.roast-box::before{content:'"';font-size:60px;color:var(--red);opacity:.3;position:absolute;top:-10px;left:16px;font-family:'Playfair Display',serif;line-height:1}
-.roast-refresh{display:flex;align-items:center;justify-content:flex-end;gap:6px;margin-top:12px;font-family:'Space Mono',monospace;font-size:11px;color:var(--rl);cursor:none;opacity:.7;transition:opacity .2s;position:relative;z-index:3}
-.roast-refresh:hover{opacity:1}
-.bk-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;margin-top:32px;position:relative;z-index:2}
-.bk{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:14px 10px;text-align:center}
-.bk-i{font-size:20px;margin-bottom:6px}
-.bk-v{font-family:'Space Mono',monospace;font-size:14px;color:var(--cream);font-weight:700}
-.bk-l{font-size:11px;color:var(--grey);margin-top:3px}
-.eq-box{margin-top:24px;padding:20px;background:rgba(212,160,23,.08);border:1px solid rgba(212,160,23,.2);border-radius:16px;position:relative;z-index:2}
-.eq-title{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.15em;color:var(--gold);text-transform:uppercase;margin-bottom:12px}
-.eq-items{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
-.eq-item{background:rgba(212,160,23,.1);border:1px solid rgba(212,160,23,.2);border-radius:100px;padding:5px 14px;font-size:13px;color:var(--gold)}
-.roi-m{margin-top:28px;position:relative;z-index:2}
-.roi-l{display:flex;justify-content:space-between;font-family:'Space Mono',monospace;font-size:11px;color:var(--grey);margin-bottom:8px}
-.roi-t{height:8px;background:rgba(255,255,255,.07);border-radius:100px;overflow:hidden}
-.roi-f{height:100%;background:linear-gradient(90deg,var(--red),var(--gold));border-radius:100px;transition:width 1.5s cubic-bezier(.16,1,.3,1);width:0%}
-/* CERT TEASE */
-.cert-tease{margin-top:36px;position:relative;z-index:2}
-.ct-card{background:linear-gradient(135deg,rgba(212,160,23,.08),rgba(192,57,43,.08));border:1px solid rgba(212,160,23,.25);border-radius:20px;padding:28px;text-align:center;position:relative;overflow:hidden}
-.ct-card::before{content:'✦';position:absolute;top:12px;left:16px;color:var(--gold);opacity:.3;font-size:14px}
-.ct-card::after{content:'✦';position:absolute;top:12px;right:16px;color:var(--gold);opacity:.3;font-size:14px}
-.ct-emotion{font-family:'Playfair Display',serif;font-size:clamp(17px,3vw,22px);color:var(--cream);line-height:1.5;margin-bottom:8px}
-.ct-emotion em{color:var(--gold);font-style:italic}
-.ct-quote{font-size:13px;color:var(--grey);font-style:italic;margin-bottom:20px;line-height:1.6;padding:0 10px}
-.cert-blur-wrap{position:relative;margin:16px 0;border-radius:14px;overflow:hidden}
-.cert-blur-inner{background:linear-gradient(135deg,#1A0808,#2D1010);border:1.5px solid rgba(212,160,23,.4);border-radius:14px;padding:20px;filter:blur(2.5px);user-select:none;pointer-events:none;text-align:center}
-.cert-blur-overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;background:rgba(10,3,3,.6);border-radius:14px}
-.lock-anim{font-size:30px;animation:lockPulse 2s ease infinite}
-@keyframes lockPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
-.lock-txt{font-family:'Space Mono',monospace;font-size:11px;color:var(--gold);letter-spacing:.12em}
-.cert-feats{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:14px 0}
-.cf{font-size:11px;background:rgba(212,160,23,.08);border:.5px solid rgba(212,160,23,.2);color:var(--gold);padding:4px 12px;border-radius:100px}
-.btn-cert-buy{display:flex;align-items:center;justify-content:center;gap:8px;background:linear-gradient(135deg,var(--gold),#A0780D);color:#1A0A0A;font-family:'Space Mono',monospace;font-size:13px;font-weight:700;padding:15px 32px;border-radius:100px;border:none;cursor:none;transition:all .2s;box-shadow:0 4px 20px rgba(212,160,23,.4);text-decoration:none;width:100%;text-transform:uppercase;letter-spacing:.05em;margin-top:4px}
-.btn-cert-buy:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(212,160,23,.6)}
-.cert-urgency{font-size:11px;color:rgba(255,255,255,.2);font-family:'Space Mono',monospace;margin-top:8px}
-/* INSTAGRAM */
-.insta-sec{margin-top:28px;position:relative;z-index:2}
-.insta-card{background:linear-gradient(135deg,rgba(131,58,180,.1),rgba(253,29,29,.1),rgba(252,176,69,.1));border:1px solid rgba(253,29,29,.2);border-radius:18px;padding:28px;text-align:center}
-.lucky-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(252,176,69,.1);border:1px solid rgba(252,176,69,.3);border-radius:100px;padding:7px 16px;font-size:12px;color:#FCCE45;font-family:'Space Mono',monospace;margin-bottom:14px}
-.insta-h{font-family:'Playfair Display',serif;font-size:20px;color:var(--cream);margin-bottom:8px}
-.insta-sub{font-size:13px;color:var(--grey);line-height:1.6;margin-bottom:14px}
-.insta-tag{font-family:'Space Mono',monospace;font-size:14px;color:#F77737;font-weight:700;margin-bottom:14px;display:block}
-.insta-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
-.insta-btn{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,#833AB4,#FD1D1D,#FCB045);color:white;font-family:'Space Mono',monospace;font-size:12px;font-weight:700;padding:12px 24px;border-radius:100px;border:none;cursor:none;transition:all .2s;text-decoration:none;text-transform:uppercase;letter-spacing:.04em}
-.insta-btn:hover{transform:translateY(-2px)}
-.cap-btn{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.15);color:var(--cream);font-family:'Space Mono',monospace;font-size:11px;padding:12px 20px;border-radius:100px;cursor:none;transition:all .2s}
-.cap-btn:hover{background:rgba(255,255,255,.1)}
-.lucky-info{margin-top:14px;padding:12px;background:rgba(252,176,69,.05);border:1px solid rgba(252,176,69,.15);border-radius:12px;font-size:12px;color:var(--grey);line-height:1.6}
-.lucky-info b{color:#FCCE45}
-/* TIP */
-.tip-sec{margin-top:28px;position:relative;z-index:2}
-.tip-card{background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.07);border-radius:18px;padding:24px;text-align:center}
-.tip-h{font-family:'Playfair Display',serif;font-size:19px;font-style:italic;color:var(--cream);margin-bottom:6px}
-.tip-sub{font-size:13px;color:var(--grey);margin-bottom:18px;line-height:1.5}
-.tip-grid{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:14px}
-.tip-btn{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);color:var(--cream);font-family:'Space Mono',monospace;font-size:12px;font-weight:700;padding:10px 16px;border-radius:12px;cursor:none;transition:all .2s;text-decoration:none;display:inline-block;text-align:center;line-height:1.4}
-.tip-btn:hover{background:rgba(212,160,23,.15);border-color:var(--gold);color:var(--gold)}
-.tip-note{font-size:10px;color:rgba(255,255,255,.15);font-family:'Space Mono',monospace}
-/* DOMAIN */
-.domain-sec{margin-top:28px;position:relative;z-index:2}
-.dom-card{background:rgba(192,57,43,.05);border:1px solid rgba(192,57,43,.2);border-radius:18px;padding:24px;text-align:center}
-.dom-h{font-family:'Playfair Display',serif;font-size:18px;color:var(--cream);margin-bottom:6px}
-.dom-sub{font-size:13px;color:var(--grey);line-height:1.6;margin-bottom:16px}
-.dom-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:rgba(192,57,43,.15);border:1px solid rgba(192,57,43,.4);color:var(--rl);font-family:'Space Mono',monospace;font-size:12px;font-weight:700;padding:12px 28px;border-radius:100px;cursor:none;text-decoration:none;transition:all .2s;text-transform:uppercase;letter-spacing:.04em}
-.dom-btn:hover{background:rgba(192,57,43,.25);transform:translateY(-2px)}
-/* AFFILIATE */
-.aff-sec{margin-top:28px;position:relative;z-index:2}
-.aff-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
-.aff-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:16px;text-align:center;text-decoration:none;transition:all .2s;cursor:none;display:block}
-.aff-card:hover{background:rgba(255,255,255,.06);transform:translateY(-2px)}
-.aff-i{font-size:24px;margin-bottom:8px}
-.aff-n{font-size:13px;font-weight:500;color:var(--cream);margin-bottom:3px}
-.aff-t{font-size:11px;color:var(--grey);line-height:1.4}
-.aff-c{display:inline-block;margin-top:6px;font-family:'Space Mono',monospace;font-size:10px;color:var(--rl);letter-spacing:.05em;text-transform:uppercase}
-/* EMAIL */
-.email-sec{margin-top:28px;position:relative;z-index:2}
-.email-card{background:rgba(29,161,242,.05);border:1px solid rgba(29,161,242,.15);border-radius:18px;padding:24px;text-align:center}
-.email-row{display:flex;gap:10px}
-.email-in{flex:1;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:12px 16px;color:var(--cream);font-size:14px;outline:none;cursor:none}
-.email-in::placeholder{color:rgba(255,255,255,.2)}
-.email-sub{background:rgba(29,161,242,.2);border:1px solid rgba(29,161,242,.3);color:#1DA1F2;font-family:'Space Mono',monospace;font-size:12px;font-weight:700;padding:12px 18px;border-radius:10px;cursor:none;transition:all .2s;white-space:nowrap}
-/* SHARE */
-.share-sec{margin-top:28px;position:relative;z-index:2}
-.share-lbl{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.15em;color:var(--grey);text-transform:uppercase;margin-bottom:14px}
-.share-btns{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
-.s-btn{display:inline-flex;align-items:center;gap:8px;padding:11px 20px;border-radius:100px;border:1px solid;font-family:'Space Mono',monospace;font-size:12px;font-weight:700;cursor:none;transition:all .2s;text-transform:uppercase;letter-spacing:.03em}
-.s-btn:hover{transform:translateY(-2px)}
-.sw{background:rgba(37,211,102,.1);border-color:rgba(37,211,102,.3);color:#25D366}
-.st{background:rgba(29,161,242,.1);border-color:rgba(29,161,242,.3);color:#1DA1F2}
-.sc{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.15);color:var(--cream)}
-.recalc{margin-top:20px;background:none;border:1px solid rgba(255,255,255,.15);color:var(--grey);font-family:'Space Mono',monospace;font-size:12px;padding:10px 24px;border-radius:100px;cursor:none;transition:all .2s;display:block;margin-left:auto;margin-right:auto;text-transform:uppercase;letter-spacing:.05em}
-.recalc:hover{border-color:rgba(255,255,255,.3);color:var(--cream)}
-/* MARQUEE */
-.stories-sec{padding:60px 20px;max-width:900px;margin:0 auto}
-.mq-wrap{overflow:hidden;-webkit-mask:linear-gradient(90deg,transparent,black 15%,black 85%,transparent);mask:linear-gradient(90deg,transparent,black 15%,black 85%,transparent)}
-.mq-track{display:flex;gap:16px;animation:mq 25s linear infinite;width:max-content}
-@keyframes mq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-.s-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:20px 24px;min-width:260px;max-width:260px;flex-shrink:0}
-.s-amt{font-family:'Playfair Display',serif;font-size:28px;font-weight:700;color:var(--rl);margin-bottom:6px}
-.s-txt{font-size:13px;color:var(--grey);line-height:1.5;font-style:italic}
-.s-nm{margin-top:12px;font-family:'Space Mono',monospace;font-size:11px;color:rgba(255,255,255,.3)}
-/* FAQ */
-.faq-sec{padding:60px 20px;max-width:600px;margin:0 auto}
-.faq-item{border-bottom:1px solid rgba(255,255,255,.07);padding:20px 0;cursor:none}
-.faq-q{display:flex;justify-content:space-between;align-items:center;font-size:15px;color:var(--cream);font-weight:500}
-.faq-ic{font-size:20px;color:var(--red);transition:transform .3s;flex-shrink:0}
-.faq-a{font-size:14px;color:var(--grey);line-height:1.7;max-height:0;overflow:hidden;transition:max-height .4s ease,margin-top .3s}
-.faq-item.open .faq-ic{transform:rotate(45deg)}
-.faq-item.open .faq-a{max-height:200px;margin-top:12px}
-footer{text-align:center;padding:40px 20px;border-top:1px solid rgba(255,255,255,.05);font-family:'Space Mono',monospace;font-size:11px;color:rgba(255,255,255,.2);letter-spacing:.05em}
-footer span{color:var(--red)}
-/* MODAL */
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:5000;display:none;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(12px);overflow-y:auto}
-.modal.show{display:flex}
-.modal-box{background:var(--dark);border-radius:24px;padding:28px;max-width:520px;width:100%;position:relative;animation:modalIn .5s cubic-bezier(.16,1,.3,1);margin:auto}
-@keyframes modalIn{from{opacity:0;transform:scale(.85) translateY(40px)}to{opacity:1;transform:scale(1) translateY(0)}}
-.modal-close{position:absolute;top:14px;right:18px;background:none;border:none;color:var(--grey);font-size:22px;cursor:none;z-index:10}
-/* CERT CARD */
-.cert-card{border-radius:16px;padding:28px 22px;position:relative;overflow:hidden;text-align:center;margin:16px 0}
-.cert-orn{position:absolute;font-size:16px;opacity:.2}
-.cert-ey{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.2em;text-transform:uppercase;margin-bottom:10px;opacity:.7}
-.cert-t1{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;margin-bottom:2px}
-.cert-t2{font-family:'Playfair Display',serif;font-size:22px;font-style:italic;margin-bottom:14px}
-.cert-div{height:1px;opacity:.3;margin:12px 0}
-.cert-cert{font-size:12px;opacity:.6;margin-bottom:5px}
-.cert-name{font-family:'Playfair Display',serif;font-size:24px;font-style:italic;margin-bottom:8px}
-.cert-wst{font-size:12px;opacity:.6;margin-bottom:6px}
-.cert-amt{font-family:'Playfair Display',serif;font-size:44px;font-weight:900;line-height:1;margin-bottom:8px}
-.cert-cl{font-size:12px;opacity:.6;line-height:1.6;margin-bottom:12px;font-style:italic;padding:0 10px}
-.cert-seal{font-size:30px;margin-bottom:8px}
-.cert-stamp{font-family:'Space Mono',monospace;font-size:8px;opacity:.2;letter-spacing:.08em}
-/* TOAST */
-.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--red);color:white;font-family:'Space Mono',monospace;font-size:13px;padding:12px 24px;border-radius:100px;z-index:9999;transition:transform .4s cubic-bezier(.16,1,.3,1);pointer-events:none}
-.toast.show{transform:translateX(-50%) translateY(0)}
-@keyframes fiu{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
-@media(max-width:600px){
-  .calc-card{padding:24px 20px}.fr{grid-template-columns:1fr}.rc{padding:32px 20px}
-  .bk-grid{grid-template-columns:repeat(2,1fr)}.share-btns{flex-direction:column;align-items:center}
-  .aff-grid{grid-template-columns:1fr}.email-row{flex-direction:column}.hero-stats{gap:20px}
-  .tip-grid{flex-direction:column;align-items:center}.modal-box{padding:20px 14px}
-}
-</style>
+<meta name="description" content="Calculate exactly how much money you wasted on your ex. Free, brutal, and unbelievably accurate.">
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="cur" id="cur"></div>
-<div class="cur-r" id="curR"></div>
-<div class="toast" id="toast"></div>
-<div id="hearts" style="position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:0"></div>
 
-<!-- CERT MODAL -->
-<div class="modal" id="certModal">
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursor-ring"></div>
+<div id="toast"></div>
+<div id="hearts-container"></div>
+
+<!-- ═══════════ CERTIFICATE MODAL ═══════════ -->
+<div class="modal-overlay" id="cert-modal">
   <div class="modal-box">
-    <button class="modal-close" onclick="closeCert()">✕</button>
-    <div id="certContent"></div>
-    <div id="certActions" style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:14px"></div>
+    <button class="modal-close" onclick="closeCertModal()">✕</button>
+    <div id="cert-modal-card"></div>
+    <div class="cert-actions" id="cert-modal-actions"></div>
+    <div class="cert-share-hint">📸 SCREENSHOT THIS · SHARE ON INSTAGRAM · TAG @BREAKUPBUDGET</div>
   </div>
 </div>
 
-<!-- HERO -->
+<!-- ═══════════ HERO ═══════════ -->
 <section class="hero">
   <div class="hero-bg"></div>
-  <div class="badge"><div class="bdot"></div>Free · 60 Seconds · Brutally Honest</div>
-  <h1><span class="l1">How Much Did</span><span class="l2">Love Cost You?</span></h1>
-  <p class="hero-sub">Enter the details. We calculate every rupee. No judgement. Only math. Only tears.</p>
-  <div class="hero-cta"><a href="#calculator" class="btn-p">💸 Calculate My Damage</a></div>
+  <div class="hero-badge">
+    <div class="hero-badge-dot"></div>
+    Free · 60 Seconds · Brutally Honest
+  </div>
+  <h1 class="hero-title">
+    <span class="t1">How Much Did</span>
+    <span class="t2">Love Cost You?</span>
+  </h1>
+  <p class="hero-subtitle">Enter your relationship details. We calculate exactly how many rupees you threw into the void. No mercy. Only math.</p>
+  <div class="hero-cta">
+    <a href="#calculator" class="btn-primary">💸 Calculate My Damage</a>
+  </div>
   <div class="hero-stats">
-    <div class="hstat"><div class="hstat-n" id="cU">0</div><div class="hstat-l">Heartbroken users</div></div>
-    <div class="hdiv"></div>
-    <div class="hstat"><div class="hstat-n" id="cA">₹0</div><div class="hstat-l">Average wasted</div></div>
-    <div class="hdiv"></div>
-    <div class="hstat"><div class="hstat-n" id="cT">₹0Cr</div><div class="hstat-l">Total destroyed</div></div>
+    <div class="hstat"><div class="hstat-n" id="stat-users">0</div><div class="hstat-l">Heartbroken Users</div></div>
+    <div class="hstat-div"></div>
+    <div class="hstat"><div class="hstat-n" id="stat-avg">₹0</div><div class="hstat-l">Average Wasted</div></div>
+    <div class="hstat-div"></div>
+    <div class="hstat"><div class="hstat-n" id="stat-total">₹0Cr</div><div class="hstat-l">Total Destroyed</div></div>
   </div>
 </section>
 
-<!-- CALCULATOR -->
+<!-- ═══════════ CALCULATOR ═══════════ -->
 <section id="calculator">
-  <div class="eyebrow">The Damage Assessment</div>
-  <h2 class="sec-title">Enter The <em>Crime Scene</em></h2>
+  <div class="section-eyebrow">The Damage Assessment</div>
+  <h2 class="section-title">Enter The <em>Crime Scene</em></h2>
+
   <div class="calc-card">
-    <div class="fg"><div class="fl">📅 Relationship Duration</div><div class="rw"><span class="rv" id="mV">12 months</span><input type="range" class="ri" id="mo" min="1" max="120" value="12" oninput="document.getElementById('mV').textContent=this.value+(this.value==1?' month':' months')"></div></div>
-    <div class="fg"><div class="fl">🍽️ Monthly Date Spending (₹)</div><div class="rw"><span class="rv" id="dV">₹2,000</span><input type="range" class="ri" id="da" min="0" max="20000" step="500" value="2000" oninput="document.getElementById('dV').textContent='₹'+parseInt(this.value).toLocaleString('en-IN')"></div></div>
-    <div class="fr">
-      <div class="fg"><div class="fl">🎁 Total Gifts (₹)</div><input type="number" class="fi" id="gi" placeholder="e.g. 8000" min="0"></div>
-      <div class="fg"><div class="fl">✈️ Trips Together (₹)</div><input type="number" class="fi" id="tr" placeholder="e.g. 15000" min="0"></div>
+
+    <div class="field-group">
+      <div class="field-label">📅 Relationship Duration</div>
+      <div class="range-wrap">
+        <span class="range-val" id="val-months">12 months</span>
+        <input type="range" class="range-input" id="range-months" min="1" max="120" value="12">
+      </div>
     </div>
-    <div class="fr">
-      <div class="fg"><div class="fl">📱 Calls & Data (₹)</div><input type="number" class="fi" id="ca" placeholder="e.g. 500" min="0"></div>
-      <div class="fg"><div class="fl">🌹 Flowers & Treats (₹)</div><input type="number" class="fi" id="fl2" placeholder="e.g. 2000" min="0"></div>
+
+    <div class="field-group">
+      <div class="field-label">🍽️ Monthly Date Spending (₹)</div>
+      <div class="range-wrap">
+        <span class="range-val" id="val-dates">₹2,000</span>
+        <input type="range" class="range-input" id="range-dates" min="0" max="20000" step="500" value="2000">
+      </div>
     </div>
-    <div class="fg"><div class="fl">😊 Your Name (for certificate)</div><input type="text" class="fi" id="un" placeholder="Your name"></div>
-    <div class="div-l"></div>
-    <button class="calc-btn" onclick="calculate()">💔 Reveal My Financial Trauma</button>
+
+    <div class="field-row">
+      <div class="field-group">
+        <div class="field-label">🎁 Total Gifts (₹)</div>
+        <input type="number" class="field-input" id="inp-gifts" placeholder="e.g. 8000" min="0">
+      </div>
+      <div class="field-group">
+        <div class="field-label">✈️ Trips Together (₹)</div>
+        <input type="number" class="field-input" id="inp-trips" placeholder="e.g. 15000" min="0">
+      </div>
+    </div>
+
+    <div class="field-row">
+      <div class="field-group">
+        <div class="field-label">📱 Calls & Data (₹)</div>
+        <input type="number" class="field-input" id="inp-calls" placeholder="e.g. 500" min="0">
+      </div>
+      <div class="field-group">
+        <div class="field-label">🌹 Flowers & Treats (₹)</div>
+        <input type="number" class="field-input" id="inp-flowers" placeholder="e.g. 2000" min="0">
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">😊 Your Name (for the certificate)</div>
+      <input type="text" class="field-input" id="inp-name" placeholder="Your name">
+    </div>
+
+    <div class="divider"></div>
+    <button class="calc-submit" onclick="calculate()">💔 Reveal My Financial Trauma</button>
   </div>
 </section>
 
-<!-- RESULT -->
+<!-- ═══════════ RESULT ═══════════ -->
 <section id="result">
-  <div class="rc">
-    <div class="verdict" id="verdict">CONFIRMED FINANCIAL DISASTER</div>
-    <div class="amount" id="amt">₹0</div>
-    <div class="amt-sub">wasted on someone who probably forgot your birthday</div>
-    <div class="roast-box" id="roastBox">
-      <span id="roastTxt"></span>
-      <div class="roast-refresh" onclick="refreshRoast()">↺ Hit me with another one</div>
-    </div>
-    <div class="bk-grid" id="bkGrid"></div>
-    <div class="eq-box"><div class="eq-title">⚡ What You Could Have Bought Instead</div><div class="eq-items" id="eqItems"></div></div>
-    <div class="roi-m"><div class="roi-l"><span>Relationship ROI</span><span id="roiTxt">0%</span></div><div class="roi-t"><div class="roi-f" id="roiF"></div></div></div>
+  <div class="result-card">
+    <div class="result-inner">
 
-    <!-- CERT TEASE -->
-    <div class="cert-tease">
-      <div class="ct-card">
-        <div class="ct-emotion">Your suffering deserves <em>official documentation.</em></div>
-        <div class="ct-quote" id="ctQ">"Some people frame degrees. You should frame your biggest financial mistake."</div>
-        <div class="cert-blur-wrap">
-          <div class="cert-blur-inner">
-            <div style="font-family:'Space Mono',monospace;font-size:9px;color:#C8960C;letter-spacing:.2em;margin-bottom:8px">✦ OFFICIAL CERTIFICATE ✦</div>
-            <div style="font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:#F5EFE6">Certificate of Romantic Loss</div>
-            <div style="font-size:11px;color:#8B7B7B;margin:8px 0">This certifies that</div>
-            <div style="font-family:'Playfair Display',serif;font-size:20px;font-style:italic;color:#F5EFE6" id="cpName">A Brave Soul</div>
-            <div style="font-size:11px;color:#8B7B7B;margin:8px 0">has wasted</div>
-            <div style="font-family:'Playfair Display',serif;font-size:36px;font-weight:900;color:#E74C3C" id="cpAmt">₹0</div>
-            <div style="font-size:24px;margin-top:10px">💔</div>
+      <!-- ═══ PHASE 1: locked tease ═══ -->
+      <div id="phase1">
+        <div class="verdict-label" id="result-verdict">CONFIRMED FINANCIAL DISASTER</div>
+        <div class="big-amount" id="result-amount">₹0</div>
+        <div class="amount-sub">wasted on someone who probably forgot your birthday</div>
+
+        <div class="roast-box">
+          <span id="roast-text"></span>
+          <div class="roast-refresh" onclick="refreshRoast()">↺ Hit me with another one</div>
+        </div>
+
+        <div class="tease-section">
+          <div class="tease-headline">Wait — <em>want to know what you could have done</em> with this money?</div>
+          <div class="tease-body">The full breakdown, 50+ things you could have bought instead, your official Relationship ROI score, your Heartbreak Horoscope, AND your one-of-a-kind shareable certificate — all locked behind one small decision.</div>
+
+          <div class="blur-grid" id="blur-grid"></div>
+          <div class="blur-pills" id="blur-pills"></div>
+
+          <div class="lock-wrap">
+            <div class="lock-icon">🔐</div>
+            <div class="lock-label">Unlock Everything — ₹49</div>
+            <div class="lock-sublabel">Full breakdown · 50+ rotating "what you could have bought" · Your ROI score · Heartbreak Horoscope · PLUS your extraordinary shareable certificate in 100+ unique designs</div>
           </div>
-          <div class="cert-blur-overlay">
-            <div class="lock-anim">🔒</div>
-            <div class="lock-txt">100+ UNIQUE DESIGNS · UNLOCK ₹49</div>
+
+          <div class="inside-list">
+            <div class="inside-item"><span class="inside-item-icon">📊</span><span><b>Full spending breakdown</b> — dates, gifts, trips, calls, flowers, all itemised</span></div>
+            <div class="inside-item"><span class="inside-item-icon">🛵</span><span><b>What you could have bought instead</b> — 50+ rotating items: Goa trips, a scooter, MacBook, surf lessons, more</span></div>
+            <div class="inside-item"><span class="inside-item-icon">📉</span><span><b>Your official Relationship ROI score</b> — prepare yourself</span></div>
+            <div class="inside-item"><span class="inside-item-icon">🔮</span><span><b>Your Heartbreak Horoscope</b> — your financial-romantic personality, revealed</span></div>
+            <div class="inside-item"><span class="inside-item-icon">🏆</span><span><b>Your one-of-a-kind certificate</b> — 100+ unique gorgeous designs that people genuinely beg to share</span></div>
+          </div>
+
+          <div class="pay-wrapper">
+            <a href="https://payments.cashfree.com/forms/breakupbudget" target="_blank" id="pay-main-btn" class="btn-gold" onclick="handlePayClick()">
+              🏆 See Everything + Get My Certificate — ₹49
+            </a>
+            <div class="pay-hint">UPI · Card · NetBanking · Instant unlock · Cashfree secure payment</div>
           </div>
         </div>
-        <div class="cert-feats">
-          <span class="cf">✨ 100+ styles</span><span class="cf">📸 Share-worthy</span><span class="cf">🏆 Raises your aura</span><span class="cf">💀 Triggers your ex</span>
-        </div>
-        <a href="https://payments.cashfree.com/forms/breakupbudget" target="_blank" class="btn-cert-buy" id="certBuyBtn">🏆 Get My Certificate — ₹49</a>
-        <div class="cert-urgency">One-time payment · Instant unlock · Worth every paisa · Tap to pay via UPI / Card</div>
       </div>
-    </div>
 
-    <!-- INSTAGRAM -->
-    <div class="insta-sec">
-      <div class="insta-card">
-        <div class="lucky-badge">🎁 Lucky Draw · Every 10 Days</div>
-        <div class="insta-h">Share. Tag. <em style="color:#FCCE45">Win a Premium Gift.</em></div>
-        <div class="insta-sub">Post your certificate on Instagram, tag us, and every 10 days we pick one lucky heartbroken soul and send them a surprise gift. Real gifts. Real winners.</div>
-        <span class="insta-tag">@breakupbudget</span>
-        <div class="insta-btns">
-          <a href="https://www.instagram.com/breakupbudget" target="_blank" class="insta-btn">📸 Tag @breakupbudget</a>
-          <button onclick="copyInstaCap()" class="cap-btn">📋 Copy Caption</button>
+      <!-- ═══ PHASE 2: full unlocked content ═══ -->
+      <div id="phase2">
+        <div class="verdict-label" id="p2-verdict">CONFIRMED FINANCIAL DISASTER</div>
+        <div class="big-amount" id="p2-amount">₹0</div>
+        <div class="amount-sub">wasted on someone who probably forgot your birthday</div>
+
+        <div class="roast-box" style="margin-top:24px">
+          <span id="p2-roast-text"></span>
+          <div class="roast-refresh" onclick="refreshRoastP2()">↺ New roast</div>
         </div>
-        <div class="lucky-info"><b>🤝 Want to collab?</b> DM us @breakupbudget. Every 10 days we announce the lucky winner and send a real premium gift. Could be you.</div>
-      </div>
-    </div>
 
-    <!-- TIP JAR -->
-    <div class="tip-sec">
-      <div class="tip-card">
-        <div class="tip-h">🧻 This site runs on heartbreak & your tips</div>
-        <div class="tip-sub">The creator cried building this at 2am. Help them survive.</div>
+        <div class="breakdown-grid" id="breakdown-grid"></div>
+
+        <div class="equiv-box">
+          <div class="equiv-title">⚡ What You Could Have Bought Instead</div>
+          <div class="equiv-items" id="equiv-items"></div>
+        </div>
+
+        <div class="roi-wrap">
+          <div class="roi-labels"><span>Relationship ROI</span><span id="roi-label-val">0%</span></div>
+          <div class="roi-track"><div class="roi-fill" id="roi-fill"></div></div>
+        </div>
+
+        <!-- Heartbreak Horoscope -->
+        <div class="tease-section" id="horoscope-section" style="display:none; text-align:center; margin-top:24px"></div>
+
+        <!-- Cert reveal -->
+        <div class="cert-reveal-section" id="cert-reveal-section">
+          <div style="font-family:var(--ff-mono);font-size:10px;color:var(--gold);letter-spacing:.15em;text-transform:uppercase;margin-bottom:6px">🏆 Your Certificate Is Ready</div>
+          <div style="font-family:var(--ff-serif);font-size:22px;color:var(--cream);margin-bottom:6px">Your <em style="color:var(--gold)">Certificate</em> of Romantic Loss</div>
+          <div style="font-size:13px;color:var(--grey);margin-bottom:16px;line-height:1.5">100+ unique designs. Every person gets a different one. People screenshot and post these constantly.</div>
+          <button class="btn-gold" onclick="openCertModal()" style="animation:none">🎨 Open My Certificate</button>
+          <div style="font-size:11px;color:rgba(255,255,255,.2);font-family:var(--ff-mono);margin-top:8px">Each calculation = a different gorgeous design · Screenshot & share</div>
+        </div>
+      </div>
+
+      <!-- ═══ INSTAGRAM ═══ -->
+      <div class="insta-section" id="section-insta" style="display:none">
+        <div class="lucky-badge"><div class="lucky-dot"></div>Lucky Draw · Every 10 Days · Real Gifts</div>
+        <div class="insta-heading">Share Your Certificate.<br>Win a <em style="color:#FCCE45">Premium Gift.</em></div>
+        <div class="insta-body">Post your certificate, tag us — every 10 days we pick one lucky heartbroken soul and send them a surprise premium gift. Real. Announced on our page.</div>
+        <span class="insta-handle">@breakupbudget</span>
+        <div class="insta-buttons">
+          <a href="https://www.instagram.com/breakupbudget" target="_blank" class="btn-insta-main">📸 Tag @breakupbudget</a>
+          <button class="btn-ghost" onclick="copyInstaCap()">📋 Copy Caption</button>
+        </div>
+        <div class="lucky-info-box">
+          <b>🏆 Win every 10 days:</b> Post certificate → Tag @breakupbudget → We DM the winner. Open for collabs — DM us if you have an audience.<br>
+          <b>🎁 Next draw:</b> <span id="next-draw-date">Loading...</span>
+        </div>
+      </div>
+
+      <!-- ═══ TIP JAR ═══ -->
+      <div class="tip-section" id="section-tip" style="display:none">
+        <div class="tip-heading">🧻 Built at 2am on heartbreak & bad decisions</div>
+        <div class="tip-body">The creator survived their own expensive relationship to build this for you. If it made you feel something — return the favour.</div>
         <div class="tip-grid">
-          <a href="https://payments.cashfree.com/forms/onetissue" target="_blank" class="tip-btn">₹29<br><span style="font-size:10px;opacity:.6">One tissue</span></a>
+          <a href="https://payments.cashfree.com/forms/onetissue" target="_blank" class="tip-btn">₹29<br><span style="font-size:10px;opacity:.6">One tissue 🧻</span></a>
           <a href="https://payments.cashfree.com/forms/neww" target="_blank" class="tip-btn">₹99<br><span style="font-size:10px;opacity:.6">Coffee ☕</span></a>
           <a href="https://payments.cashfree.com/forms/bigg" target="_blank" class="tip-btn">₹199<br><span style="font-size:10px;opacity:.6">Biryani 🍛</span></a>
           <a href="https://payments.cashfree.com/forms/biggest" target="_blank" class="tip-btn">₹499<br><span style="font-size:10px;opacity:.6">Big love 💛</span></a>
         </div>
-        <div class="tip-note">Pure gratitude economy. Goes directly to the developer 🙏</div>
+        <div class="tip-note">100% goes to the developer · No platform cut · Pure gratitude</div>
       </div>
-    </div>
 
-    <!-- DOMAIN FUND -->
-    <div class="domain-sec">
-      <div class="dom-card">
-        <div style="font-size:28px;margin-bottom:10px">🌐</div>
-        <div class="dom-h">Help Us Level Up 💔</div>
-        <div class="dom-sub">This site lives on a free domain. If it made you laugh, cry, or feel seen — help us grow. No fixed amount. No pressure. Just love.</div>
-        <a href="https://payments.cashfree.com/forms/buynewdomain" target="_blank" class="dom-btn">💸 Support This Site</a>
-        <div style="font-size:10px;color:rgba(255,255,255,.15);font-family:'Space Mono',monospace;margin-top:10px">Custom amount · Every rupee counts · Thank you 🙏</div>
+      <!-- ═══ DOMAIN FUND ═══ -->
+      <div class="domain-section" id="section-domain" style="display:none">
+        <div style="font-size:26px;margin-bottom:8px">🌐</div>
+        <div class="domain-heading">Help This Site Grow 💔</div>
+        <div class="domain-body">This site runs on a free domain. If it made you laugh, cry, or feel seen — help us level up. Pay whatever your heart says. No fixed amount. No pressure. Just love.</div>
+        <a href="https://payments.cashfree.com/forms/buynewdomain" target="_blank" class="btn-domain">💸 Support This Site — Any Amount</a>
+        <div class="domain-note">Custom amount · Cashfree secure · Every rupee means everything 🙏</div>
       </div>
-    </div>
 
-    <!-- AFFILIATE -->
-    <div class="aff-sec">
-      <div class="eyebrow" style="text-align:left;margin-bottom:4px">💡 Ready to do better?</div>
-      <div class="aff-grid">
-        <a href="#" target="_blank" class="aff-card"><div class="aff-i">🐝</div><div class="aff-n">Try Bumble</div><div class="aff-t">Someone who texts back. Women make the first move.</div><div class="aff-c">Start free →</div></a>
-        <a href="#" target="_blank" class="aff-card"><div class="aff-i">🏠</div><div class="aff-n">New Flat?</div><div class="aff-t">Moving out? NoBroker — zero brokerage, fresh start.</div><div class="aff-c">Search →</div></a>
-        <a href="#" target="_blank" class="aff-card"><div class="aff-i">🧠</div><div class="aff-n">Talk to Someone</div><div class="aff-t">YourDOST — online therapy, first session free.</div><div class="aff-c">Book →</div></a>
-        <a href="#" target="_blank" class="aff-card"><div class="aff-i">📦</div><div class="aff-n">Treat Yourself</div><div class="aff-t">You just saved future you from a bad investment.</div><div class="aff-c">Shop →</div></a>
+      <!-- ═══ AFFILIATE ═══ -->
+      <div class="aff-section" id="section-aff" style="display:none">
+        <div class="aff-eyebrow">💡 Ready to invest better?</div>
+        <div class="aff-grid">
+          <a href="#" target="_blank" class="aff-card"><div class="aff-icon">🐝</div><div class="aff-name">Try Bumble</div><div class="aff-desc">Someone who actually texts back.</div><div class="aff-cta">Start free →</div></a>
+          <a href="#" target="_blank" class="aff-card"><div class="aff-icon">🏠</div><div class="aff-name">New Flat?</div><div class="aff-desc">Moving out? NoBroker, zero brokerage.</div><div class="aff-cta">Search →</div></a>
+          <a href="#" target="_blank" class="aff-card"><div class="aff-icon">🧠</div><div class="aff-name">Talk to Someone</div><div class="aff-desc">YourDOST — first session free.</div><div class="aff-cta">Book →</div></a>
+          <a href="#" target="_blank" class="aff-card"><div class="aff-icon">📦</div><div class="aff-name">Treat Yourself</div><div class="aff-desc">You earned it. Shop what stays.</div><div class="aff-cta">Shop →</div></a>
+        </div>
       </div>
-    </div>
 
-    <!-- EMAIL -->
-    <div class="email-sec">
-      <div class="email-card">
-        <div style="font-family:'Playfair Display',serif;font-size:18px;color:var(--cream);margin-bottom:6px">📬 Free <em style="color:#1DA1F2">Glow-Up Finance Guide</em></div>
-        <div style="font-size:13px;color:var(--grey);margin-bottom:16px;line-height:1.5">7 money moves after a breakup. Free. No spam.</div>
-        <form onsubmit="emailSub(event)"><div class="email-row"><input type="email" class="email-in" placeholder="your@email.com" required><button type="submit" class="email-sub">Send →</button></div></form>
-        <div style="font-size:10px;color:rgba(255,255,255,.15);font-family:'Space Mono',monospace;margin-top:8px">Join 2,400+ people rebuilding post-breakup</div>
+      <!-- ═══ SHARE ═══ -->
+      <div class="share-section" id="section-share" style="display:none">
+        <div class="share-label">📢 Make Your Ex Feel This</div>
+        <div class="share-buttons">
+          <button class="btn-share bs-wa" onclick="shareWhatsApp()">💬 WhatsApp</button>
+          <button class="btn-share bs-tw" onclick="shareTwitter()">𝕏 Twitter</button>
+          <button class="btn-share bs-cp" onclick="copyShareText()">📋 Copy</button>
+        </div>
       </div>
-    </div>
 
-    <!-- SHARE -->
-    <div class="share-sec">
-      <div class="share-lbl">📢 Make Your Ex Feel Guilty</div>
-      <div class="share-btns">
-        <button class="s-btn sw" onclick="shareWA()">💬 WhatsApp</button>
-        <button class="s-btn st" onclick="shareTW()">𝕏 Twitter</button>
-        <button class="s-btn sc" onclick="copyRes()">📋 Copy</button>
-      </div>
+      <button class="btn-recalc" onclick="recalculate()">↺ Calculate Another Disaster</button>
     </div>
-    <button class="recalc" onclick="recalc()">↺ Calculate Another Disaster</button>
   </div>
 </section>
 
-<!-- STORIES -->
-<section class="stories-sec">
-  <div class="eyebrow">Real Confessions</div>
-  <h2 class="sec-title" style="font-size:clamp(24px,4vw,36px);margin-bottom:32px">They Did The Math.<br><em>You're Not Alone.</em></h2>
-  <div class="mq-wrap"><div class="mq-track" id="mqT"></div></div>
+<!-- ═══════════ STORIES MARQUEE ═══════════ -->
+<section class="stories-section">
+  <div class="section-eyebrow">Real Confessions</div>
+  <h2 class="section-title" style="font-size:clamp(22px,4vw,34px); margin-bottom:32px">They Did The Math.<br><em>You're Not Alone.</em></h2>
+  <div class="marquee-wrap"><div class="marquee-track" id="marquee-track"></div></div>
 </section>
 
-<!-- FAQ -->
-<section class="faq-sec">
-  <div class="eyebrow">Questions</div>
-  <h2 class="sec-title" style="font-size:clamp(24px,4vw,36px);margin-bottom:32px">You <em>Asked</em></h2>
-  <div id="faqList"></div>
+<!-- ═══════════ EMAIL CAPTURE ═══════════ -->
+<section style="max-width:680px; margin:0 auto; padding:0 20px 60px">
+  <div class="tip-section">
+    <div class="tip-heading">📬 Free <em style="color:#1DA1F2">Glow-Up Finance Guide</em></div>
+    <div class="tip-body">7 money moves to make after a breakup. Free. No spam.</div>
+    <form onsubmit="handleEmailSubmit(event)" style="display:flex; gap:10px">
+      <input type="email" class="field-input" placeholder="your@email.com" required style="flex:1">
+      <button type="submit" class="btn-ghost" style="white-space:nowrap">Send →</button>
+    </form>
+    <div class="tip-note" style="margin-top:10px">Join 2,400+ people rebuilding post-breakup</div>
+  </div>
 </section>
 
+<!-- ═══════════ FAQ ═══════════ -->
+<section class="faq-section">
+  <div class="section-eyebrow">Questions</div>
+  <h2 class="section-title" style="font-size:clamp(22px,4vw,34px); margin-bottom:32px">You <em>Asked</em></h2>
+  <div id="faq-list"></div>
+</section>
+
+<!-- ═══════════ FOOTER ═══════════ -->
 <footer>
-  <div style="font-family:'Playfair Display',serif;font-size:20px;font-style:italic;color:var(--cream);margin-bottom:8px">BreakupBudget<span>.pages.dev</span></div>
-  <div>Made with <span>💔</span> for everyone who loved wrong · <span>©</span> 2025</div>
-  <div style="margin-top:6px">Not financial advice. Definitely emotional advice.</div>
-  <div style="margin-top:8px"><a href="https://www.instagram.com/breakupbudget" target="_blank" style="color:rgba(255,255,255,.3);text-decoration:none">@breakupbudget</a></div>
+  <div class="footer-brand">BreakupBudget<span>.pages.dev</span></div>
+  <div>Made with 💔 for everyone who loved wrong · © 2025</div>
+  <div style="margin-top:6px; opacity:.6">Not financial advice. Definitely emotional advice.</div>
+  <div style="margin-top:8px"><a href="https://instagram.com/breakupbudget" target="_blank">@breakupbudget on Instagram</a></div>
 </footer>
 
-<script src="https://breakupbudget.pages.dev/data.js" onerror=""></script>
-<script>
-// CURSOR
-const cur=document.getElementById('cur'),curR=document.getElementById('curR');
-let mx=0,my=0,rx=0,ry=0;
-document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx-7+'px';cur.style.top=my-7+'px';});
-(function ar(){rx+=(mx-rx-18)*0.12;ry+=(my-ry-18)*0.12;curR.style.left=rx+'px';curR.style.top=ry+'px';requestAnimationFrame(ar);})();
-document.querySelectorAll('button,a,input,.faq-item,.roast-refresh').forEach(el=>{
-  el.addEventListener('mouseenter',()=>{cur.style.transform='scale(2)';curR.style.transform='scale(1.5)';});
-  el.addEventListener('mouseleave',()=>{cur.style.transform='scale(1)';curR.style.transform='scale(1)';});
-});
-
-// HEARTS
-const hc=document.getElementById('hearts');
-'💔💸😭🥀📉💀🤡😤🫀💳'.split('').forEach(e=>{
-  const h=document.createElement('div');h.className='fh';h.textContent=e;
-  h.style.cssText=`position:absolute;left:${Math.random()*100}%;font-size:${16+Math.random()*18}px;animation-duration:${12+Math.random()*20}s;animation-delay:${-Math.random()*20}s;`;
-  hc.appendChild(h);
-});
-
-// COUNTERS
-function animC(el,t,pre='',suf='',d=2000){let s=null;(function step(ts){if(!s)s=ts;const p=Math.min((ts-s)/d,1),e=1-Math.pow(1-p,3);el.textContent=pre+Math.floor(e*t).toLocaleString('en-IN')+suf;if(p<1)requestAnimationFrame(step);})(0);}
-setTimeout(()=>{animC(document.getElementById('cU'),47382);animC(document.getElementById('cA'),52000,'₹');animC(document.getElementById('cT'),24,'₹','Cr');},500);
-
-function fmt(n){return '₹'+n.toLocaleString('en-IN');}
-
-// 250+ ROASTS
-const ROASTS=[
-  a=>`You spent ${fmt(a)}. That's less than a decent dinner for two. Your ex was either cheap or you were emotionally efficient. Either way — respect the budget, mourn the choices.`,
-  a=>`${fmt(a)}? You broke up for the price of a few Ola rides. The trauma is real. The math is embarrassing.`,
-  a=>`${fmt(a)} spent. ${fmt(a)} learned. This was practically a free lesson in human psychology. Expensive therapy costs more.`,
-  a=>`You got your heart broken for ${fmt(a)}. That's literally what a phone cover costs. The audacity of your ex doing this much damage so cheaply.`,
-  a=>`${fmt(a)}. You spent less on this relationship than most people spend on a month of Zomato. The question is — which one gave you more joy?`,
-  a=>`Honestly? ${fmt(a)} is practically the best ROI on pain in recorded history. You cried for free. The investment was minimal. The damage, clearly, was not.`,
-  a=>`${fmt(a)} gone. That's a boAt earphone, a month of Spotify, AND a weekend trip to Kasol. But you chose love. Love chose the exit door.`,
-  a=>`You spent ${fmt(a)} and got what? Blurry memories and a contact you're not supposed to text at midnight? Incredible financial decision.`,
-  a=>`${fmt(a)}. That's 3 months of a good OTT bundle. You could've been watching shows instead of going on dates that led to this moment. Think.`,
-  a=>`${fmt(a)} is literally a solo train trip to Goa and back. But no, you took them to dinner instead. They took your peace. Classic exchange.`,
-  a=>`${fmt(a)} on one person. Meanwhile your mutual funds are sitting there, doing nothing, judging you silently. Very quietly. Very accurately.`,
-  a=>`You invested ${fmt(a)} in a relationship with 0% return and 100% heartbreak rate. Even crypto performs better on its worst days.`,
-  a=>`${fmt(a)}. That's roughly ${Math.floor(a/500)} cups of that overpriced café coffee from your dates. Each cup now costs approximately one breakup.`,
-  a=>`The good news: you spent only ${fmt(a)}. The bad news: you remember every single rupee. The worse news: so do we, now.`,
-  a=>`${fmt(a)}. You could have bought a PlayStation, set it up in your room, and lived your best life. Instead you bought heartbreak DLC with no refund policy.`,
-  a=>`At ${fmt(a)}, you've officially crossed the "I could have gone to Thailand" threshold. Solo. With good food. With no one to disappoint you.`,
-  a=>`${fmt(a)} is a down payment on a two-wheeler. You could be cruising the highway right now, wind in your hair, nobody texting back. Freedom. You chose the other thing.`,
-  a=>`${fmt(a)} spent. That's ${Math.floor(a/200)} plates of biryani. You could have eaten biryani every single day and been substantially happier. Science probably backs this.`,
-  a=>`Congratulations. With ${fmt(a)}, you have officially entered the "I should start a blog about this" territory. The story arc is compelling. The financial decision was not.`,
-  a=>`${fmt(a)}. In startup terms, this was a Series A investment with zero returns, a toxic co-founder, and an exit strategy that involved crying at 2am.`,
-  a=>`You spent ${fmt(a)} on someone who clearly didn't file the ROI report. In the corporate world, this project would've been cancelled in Q2.`,
-  a=>`${fmt(a)} is what some people pay for a weekend wellness retreat. You got the opposite of wellness. You got the raw anti-retreat experience.`,
-  a=>`${fmt(a)}. You know what this is? MacBook Air, a Canon DSLR, AND a Goa trip. All of which would still be with you today. Unlike some people.`,
-  a=>`At ${fmt(a)}, we've entered certified disaster territory. Your bank account saw this coming. Your bank account tried to warn you. You did not listen.`,
-  a=>`${fmt(a)} is serious money. That's a year of EMIs on a decent scooter. The scooter would take you places. This relationship took you in circles.`,
-  a=>`You invested ${fmt(a)} in a relationship with a 0% return and 100% heartbreak rate. Even crypto performs better. Most days.`,
-  a=>`${fmt(a)} gone. That's roughly ${Math.floor(a/1200)} cinema dates. You could've watched every Marvel film, every Bollywood blockbuster. Alone. Peacefully. With popcorn.`,
-  a=>`${fmt(a)}. This is not a breakup. This is a financial event. Call your CA. File your losses. Begin the healing process with a good auditor.`,
-  a=>`With ${fmt(a)}, you have crossed from "expensive lesson" to "case study." Business schools would study your decision-making here. Not kindly.`,
-  a=>`${fmt(a)}. Brother. Sister. Friend. This is not a breakup amount. This is startup seed funding. You could have built something. Instead you funded someone's vibe era.`,
-  a=>`At ${fmt(a)}, you didn't date them. You sponsored them. There is a meaningful legal difference between a partner and a patron of the arts. You have crossed it.`,
-  a=>`${fmt(a)} is a semester abroad. A year learning a new skill. You invested it in someone who apparently had better portfolio options.`,
-  a=>`You spent ${fmt(a)} and what do you have? Some screenshots, a blocked contact, and a number displayed in a horrifying font on your screen right now.`,
-  a=>`${fmt(a)}. We need a moment of silence. Not for the relationship. For the money. The relationship had its time. The money deserved better.`,
-  a=>`${fmt(a)} is a car down payment. A Europe trip. Six months of rent. You gave all of that to one person who decided you weren't the one. After careful consideration.`,
-  a=>`At ${fmt(a)}, you have officially become the protagonist of a financial thriller. The twist? You were the villain to your own savings account the whole time.`,
-  a=>`${fmt(a)}. You know what this is? This is generational wealth leaving your family tree. Your unborn grandchildren are feeling this. Think about what you've done.`,
-  a=>`You gave them ${fmt(a)} worth of your resources. They gave you a story. The story is good though. It ends with you here, calculating, healing, and slightly amused.`,
-  a=>`Love is blind. Your bank account, unfortunately, is not. ${fmt(a)} later, both of you can see perfectly clearly.`,
-  a=>`Every time you spent money on them, your wallet silently filed a complaint. ${fmt(a)} of complaints later, you're finally listening.`,
-  a=>`${fmt(a)} is your entry fee into the exclusive club of people who learned the hard, expensive, slightly humiliating way. Welcome. We have certificates.`,
-  a=>`They say time heals everything. They never mention that ${fmt(a)} does not return with time. That part nobody warns you about.`,
-  a=>`${fmt(a)} invested. Zero dividends. Maximum emotional volatility. SEBI would have flagged this investment immediately.`,
-  a=>`You spent ${fmt(a)} on love and got heartbreak in return. Economists call this market failure. Poets call it tragedy. Your parents would call it something else.`,
-  a=>`${fmt(a)} is what it cost to learn that "we'll figure it out" means different things to different people. Expensive vocabulary lesson.`,
-  a=>`They say love is priceless. That's statistically false. Love cost you exactly ${fmt(a)}. Very specific. Very priceable. Very gone.`,
-  a=>`${fmt(a)} and not a single paisa came back. Even your ex's hoodie has probably found a new owner. The money never will.`,
-  a=>`You could frame this certificate. You could frame the ${fmt(a)} receipt. Title the installation: "My Worst Investment." Critics would call it brave.`,
-  a=>`${fmt(a)} is what you paid for the full experience: butterflies, inside jokes, situationship confusion, and the 2am realisation that this was never going to work.`,
-  a=>`The stock market has bad days. Crypto crashes. You had this relationship. All three will eventually recover. Two of them faster than the other.`,
-  a=>`${fmt(a)} later and you're single, wiser, and reading a roast on a website at an unusual hour. This is character development. Expensive, but character development.`,
-  a=>`You gave them ${fmt(a)} worth of resources. They gave you a story. The story ends with you here — calculating, healing, and building better instincts.`,
-  a=>`${fmt(a)} gone. That's the tuition fee for the class called "They Were Not Who I Thought 101." No credits. No degree. Just data.`,
-  a=>`Here's the thing about ${fmt(a)}: it's already spent. It's not coming back. But you are. Slowly. With better judgment and slightly less savings.`,
-  a=>`${fmt(a)} and all you got was this certificate. Which is actually quite beautiful. Frame it. Heal. Move on. Never repeat.`,
-  a=>`You didn't waste ${fmt(a)}. You invested in a very expensive lesson about human nature, emotional patterns, and why red flags come in attractive packaging.`,
-  a=>`${fmt(a)}. That's the cost of one lesson in human unpredictability. Most universities charge more. Few hurt this much.`,
-  a=>`The relationship is over. The ${fmt(a)} is gone. The WiFi password they never changed is the last thing they gave you for free.`,
-  a=>`${fmt(a)} spent believing in forever. Forever lasted — well. The math was always going to be this. You just needed to see it written down.`,
-  a=>`You could buy ${Math.floor(a/350)} buckets of KFC with ${fmt(a)}. You chose love. Love did not come with 11 herbs and spices. Unfortunate.`,
-  a=>`${fmt(a)} on one human. Your electricity bill for the same period was less dramatic and also more reliable.`,
-  a=>`With ${fmt(a)} you have firmly established that your heart and your wallet have a trust issue. They need couples therapy. With each other.`,
-  a=>`${fmt(a)}. Shakespeare wrote tragedies about far less. You lived one. You survived it. You are now immortalised on a breakup calculator at 2am. Peak narrative arc.`,
-  a=>`Your ex got ${fmt(a)} worth of your attention, time, and money. They gave you character growth, emotional scars, and this certificate. Arguably a fair trade. Arguably.`,
-  a=>`${fmt(a)} is a lot of money to spend on someone who clearly did not read the return policy. No refunds. No exchanges. Just data and this PDF.`,
-  a=>`You invested ${fmt(a)} in the hope that love would compound like a fixed deposit. Instead it crashed like a meme stock in February. Same energy, worse outcome.`,
-  a=>`${fmt(a)}. In another timeline, this money bought you peace of mind, good food, and a plant that actually thrives under your care. In this one, you got left on read.`,
-  a=>`This is what ${fmt(a)} looks like when spent on one person who was never planning to stay. It looks like this screen. This number. This certificate.`,
-  a=>`${fmt(a)} is the price of learning that "I'll always be here" has a very flexible definition. Lesson learned. Certificate earned. Move forward.`,
-  a=>`Some people spend ${fmt(a)} on a laptop that lasts 5 years. You spent it on a relationship that lasted — well. The laptop would have been more loyal.`,
-  a=>`You gave ${fmt(a)} to someone who gave you the gift of growth, resilience, and a number so large it deserves its own font size. The gift of perspective is priceless.`,
-  a=>`${fmt(a)} is the official cost of believing in someone more than they believed in the relationship. Add it to your wisdom portfolio. Mark it as non-recoverable.`,
-  a=>`Here lies ${fmt(a)}, spent in the service of love between ${new Date().getFullYear()-2} and ${new Date().getFullYear()}. May it rest in peace. May you rest in growth.`,
-  a=>`${fmt(a)} confirms you are the kind of person who gives everything. The next person who gets that? They better know what they have. This one clearly didn't.`,
-  a=>`The verdict is in: ${fmt(a)} spent, zero returns, full heartbreak, and one very dramatic certificate. The financial system has no category for this level of investment in a person. It should.`,
-];
-
-// 50+ EQUIVALENTS
-const EQUIVS=[
-  a=>a>=200?`🍕 ${Math.floor(a/200)} pizza slices`:null,
-  a=>a>=120?`🧋 ${Math.floor(a/120)} bubble teas`:null,
-  a=>a>=4500?`✈️ ${Math.floor(a/4500)} Goa return tickets`:null,
-  a=>a>=8000?`🏋️ ${Math.floor(a/8000)} gym years`:null,
-  a=>a>=180?`🍔 ${Math.floor(a/180)} burgers`:null,
-  a=>a>=150?`🎬 ${Math.floor(a/150)} cinema tickets`:null,
-  a=>a>=350?`🏏 ${Math.floor(a/350)} cricket match tickets`:null,
-  a=>a>=400?`🏊 ${Math.floor(a/400)} swimming sessions`:null,
-  a=>a>=5000?`🏕️ ${Math.floor(a/5000)} camping trips`:null,
-  a=>a>=180?`🍜 ${Math.floor(a/180)} Maggi dates (which were better)`:null,
-  a=>a>=600?`📚 ${Math.floor(a/600)} good books`:null,
-  a=>a>=2000?`🎸 ${Math.floor(a/2000)} guitar lessons`:null,
-  a=>a>=350?`🌮 ${Math.floor(a/350)} street food nights`:null,
-  a=>a>=900?`💆 ${Math.floor(a/900)} spa sessions`:null,
-  a=>a>=50000?`🛵 A Splendor down payment`:null,
-  a=>a>=100000?`🏖️ 10 days in Bali solo`:null,
-  a=>a>=75000?`💻 A MacBook Air`:null,
-  a=>a>=25000?`📱 A new iPhone SE`:null,
-  a=>a>=15000?`🎮 A PS5 game collection`:null,
-  a=>a>=200000?`🌍 A solo Europe trip`:null,
-  a=>a>=12000?`🚴 A good road cycle`:null,
-  a=>a>=8000?`🧘 1 year of yoga classes`:null,
-  a=>a>=500?`☕ ${Math.floor(a/500)} Starbucks coffees`:null,
-  a=>a>=1800?`🎵 ${Math.floor(a/1800)} concert tickets`:null,
-  a=>a>=3000?`🏄 ${Math.floor(a/3000)} surf lessons in Goa`:null,
-  a=>a>=700?`🎳 ${Math.floor(a/700)} bowling nights`:null,
-  a=>a>=200?`🌱 ${Math.floor(a/200)} indoor plants (that won't leave)`:null,
-  a=>a>=2500?`🌄 ${Math.floor(a/2500)} sunrise trek trips`:null,
-  a=>a>=350?`🥘 ${Math.floor(a/350)} biryani boxes`:null,
-  a=>a>=150000?`🚗 A second-hand car`:null,
-  a=>a>=20000?`🏔️ A solo Himalayan trek`:null,
-  a=>a>=5000?`📖 An entire bookshelf`:null,
-  a=>a>=3500?`🎻 A ukulele + lessons`:null,
-  a=>a>=800?`🎨 ${Math.floor(a/800)} art class sessions`:null,
-  a=>a>=500?`🕯️ ${Math.floor(a/500)} scented candle sets`:null,
-  a=>a>=4000?`🤿 A scuba diving course in Goa`:null,
-  a=>a>=1200?`🎢 ${Math.floor(a/1200)} amusement park days`:null,
-  a=>a>=300?`🍺 ${Math.floor(a/300)} nights out with real friends`:null,
-  a=>a>=2000?`🎤 ${Math.floor(a/2000)} karaoke nights`:null,
-  a=>a>=6000?`👟 ${Math.floor(a/6000)} pairs of good sneakers`:null,
-  a=>a>=400?`🎯 ${Math.floor(a/400)} mini golf games`:null,
-  a=>a>=10000?`📷 A decent camera`:null,
-  a=>a>=1500?`🖼️ ${Math.floor(a/1500)} art prints for your wall`:null,
-  a=>a>=900?`🛁 ${Math.floor(a/900)} luxury bath bomb nights`:null,
-  a=>a>=2500?`🎡 ${Math.floor(a/2500)} full carnival days`:null,
-  a=>a>=1000?`🏸 ${Math.floor(a/1000)} badminton sessions with snacks`:null,
-  a=>a>=600?`🎲 ${Math.floor(a/600)} board game nights`:null,
-  a=>a>=250?`🍦 ${Math.floor(a/250)} ice cream dates with yourself`:null,
-  a=>a>=3000?`🚵 A solid mountain bike`:null,
-  a=>a>=1200?`🎭 ${Math.floor(a/1200)} theatre show nights`:null,
-];
-
-let eqOffset=0;
-function getEquivs(total){
-  const valid=EQUIVS.map(fn=>fn(total)).filter(Boolean);
-  if(valid.length===0)return['🌱 At least one indoor plant that won\'t ghost you'];
-  const result=[];
-  for(let i=0;i<Math.min(4,valid.length);i++) result.push(valid[(eqOffset+i)%valid.length]);
-  eqOffset=(eqOffset+4)%Math.max(valid.length,1);
-  return result;
-}
-
-// CERT QUOTES
-const CQ=[
-  `"Some people frame degrees. You should frame your biggest financial mistake. At least it'll make people laugh."`,
-  `"This certificate proves you loved deeply, spent generously, and learned expensively. Frame it."`,
-  `"Your ex has moved on. Your wallet has not. This certificate is proof that at least one of you was committed."`,
-  `"People hang achievements on walls. This is your achievement. You survived. You calculated. You posted."`,
-  `"100+ unique designs because your heartbreak is one of a kind. And so is this certificate."`,
-  `"Studies show 0% of exes regret leaving until they see your glow-up. Let the certificate start it."`,
-  `"You gave them time, money, and your playlists. Keep this certificate. It's the only receipt you have."`,
-  `"This is not a breakup certificate. This is a graduation certificate. You passed life's most expensive class."`,
-  `"Share it on Instagram. Tag them. Let the number do the talking."`,
-  `"The certificate doesn't judge. It only documents. Unlike everyone else in your life right now."`,
-];
-
-// 20+ CERT STYLES
-const CS=[
-  {bg:'#0D0505',br:'#C8960C',tc:'#F5EFE6',ac:'#D63031',ec:'#C8960C',nm:'Dark Royal'},
-  {bg:'#0A0A1A',br:'#7B68EE',tc:'#E8E8FF',ac:'#9B59B6',ec:'#7B68EE',nm:'Midnight Purple'},
-  {bg:'#001A0D',br:'#00C853',tc:'#E8FFE8',ac:'#00E676',ec:'#00C853',nm:'Matrix Green'},
-  {bg:'#1A0D00',br:'#FF8C00',tc:'#FFF8E8',ac:'#FF6B00',ec:'#FF8C00',nm:'Amber Blaze'},
-  {bg:'#0D001A',br:'#FF1493',tc:'#FFE8F8',ac:'#FF69B4',ec:'#FF1493',nm:'Hot Pink'},
-  {bg:'#001A1A',br:'#00BCD4',tc:'#E8FFFF',ac:'#00E5FF',ec:'#00BCD4',nm:'Neon Teal'},
-  {bg:'#1A1A00',br:'#FFD700',tc:'#FFFDE8',ac:'#FFC107',ec:'#FFD700',nm:'Pure Gold'},
-  {bg:'#1A0000',br:'#FF4444',tc:'#FFE8E8',ac:'#FF0000',ec:'#FF4444',nm:'Blood Red'},
-  {bg:'#0D0D0D',br:'#FFFFFF',tc:'#FFFFFF',ac:'#CCCCCC',ec:'#FFFFFF',nm:'Monochrome'},
-  {bg:'#001833',br:'#4FC3F7',tc:'#E8F4FF',ac:'#29B6F6',ec:'#4FC3F7',nm:'Ocean Blue'},
-  {bg:'#1A000D',br:'#E91E63',tc:'#FFE8F0',ac:'#F06292',ec:'#E91E63',nm:'Romantic Rose'},
-  {bg:'#0A1A00',br:'#8BC34A',tc:'#F0FFE8',ac:'#7CB342',ec:'#8BC34A',nm:'Forest Green'},
-  {bg:'#1A1000',br:'#FF9800',tc:'#FFF8E8',ac:'#F57C00',ec:'#FF9800',nm:'Sunset Orange'},
-  {bg:'#100018',br:'#BA68C8',tc:'#F8E8FF',ac:'#AB47BC',ec:'#BA68C8',nm:'Lavender Dream'},
-  {bg:'#001010',br:'#26A69A',tc:'#E8FFFF',ac:'#00897B',ec:'#26A69A',nm:'Deep Sea'},
-  {bg:'#18000A',br:'#F06292',tc:'#FFE8F4',ac:'#EC407A',ec:'#F06292',nm:'Bubblegum Pink'},
-  {bg:'#0A0A0A',br:'#CFB53B',tc:'#FFF9E8',ac:'#CFB53B',ec:'#B8860B',nm:'Old Gold'},
-  {bg:'#000D1A',br:'#1565C0',tc:'#E8F0FF',ac:'#1E88E5',ec:'#1565C0',nm:'Royal Blue'},
-  {bg:'#1A0A0A',br:'#FF7043',tc:'#FFF0E8',ac:'#F4511E',ec:'#FF7043',nm:'Volcanic'},
-  {bg:'#0D1A00',br:'#689F38',tc:'#F4FFE8',ac:'#558B2F',ec:'#689F38',nm:'Sage Forest'},
-];
-const CLOSINGS=[
-  'May your next relationship have better ROI.',
-  'The market was volatile. You invested anyway. Respect.',
-  'Future you will laugh at this. Eventually.',
-  'You didn\'t lose money. You bought very expensive experience.',
-  'The audacity to love this hard is actually admirable. Expensive, but admirable.',
-  'May your next portfolio perform better than this one.',
-  'Onward. Upward. Away from them.',
-  'The exit was painful. The data is useful.',
-  'You survived. The savings account will recover. Give it time.',
-  'This is not the end. This is a very dramatic plot twist.',
-  'Consider this your Series A failure. The Series B will be better.',
-  'Not all investments pay in money. Some pay in wisdom. This one paid both. Mostly wisdom.',
-  'Filed under: Lessons Learned, Do Not Repeat.',
-  'The relationship had an expiry date. The certificate does not.',
-  'You loved. You lost. You calculated. You levelled up.',
-  'Some people collect stamps. You collected heartbreak data. Equally valid.',
-  'Next time: due diligence before the first date. You\'re welcome.',
-  'The receipt has been processed. The healing has been initiated.',
-  'From the ashes of this budget, a wiser spender rises.',
-  'Your bank account weeps. Your character grows. Net positive.',
-];
-
-let certIdx=0,lastTotal=0,lastName='You',lastRoastIdx=0;
-
-function buildCert(name,amount){
-  const s=CS[certIdx%CS.length];
-  const closing=CLOSINGS[certIdx%CLOSINGS.length];
-  const orns=['✦','❧','◆','✿','⚜','❦','✶','⁕'];
-  const o=orns[certIdx%orns.length];
-  const bStyles=['solid','double','dashed','ridge'];
-  const bs=bStyles[Math.floor(certIdx/5)%4];
-  return `<div class="cert-card" style="background:${s.bg};border:2.5px ${bs} ${s.br}">
-    <span class="cert-orn" style="top:10px;left:14px;color:${s.ec}">${o}</span>
-    <span class="cert-orn" style="top:10px;right:14px;color:${s.ec}">${o}</span>
-    <span class="cert-orn" style="bottom:10px;left:14px;color:${s.ec}">${o}</span>
-    <span class="cert-orn" style="bottom:10px;right:14px;color:${s.ec}">${o}</span>
-    <div class="cert-ey" style="color:${s.ec}">BreakupBudget · Certificate Style #${(certIdx%20)+1} of 100+</div>
-    <div class="cert-t1" style="color:${s.tc}">Certificate of</div>
-    <div class="cert-t2" style="color:${s.ac}">Romantic Loss</div>
-    <div class="cert-div" style="background:${s.br}"></div>
-    <div class="cert-cert" style="color:${s.tc}">This certifies that</div>
-    <div class="cert-name" style="color:${s.tc}">${name}</div>
-    <div class="cert-wst" style="color:${s.tc}">has officially wasted</div>
-    <div class="cert-amt" style="color:${s.ac}">${fmt(amount)}</div>
-    <div class="cert-div" style="background:${s.br}"></div>
-    <div class="cert-cl" style="color:${s.tc}">${closing}</div>
-    <div class="cert-seal">💔</div>
-    <div class="cert-stamp" style="color:${s.tc}">ISSUED BY BREAKUPBUDGET.PAGES.DEV · NOT LEGALLY BINDING · EMOTIONALLY BINDING · ${new Date().getFullYear()} · STYLE: ${s.nm}</div>
-  </div>`;
-}
-
-function openCertModal(){
-  certIdx++;
-  document.getElementById('certContent').innerHTML=`
-    <div style="text-align:center;margin-bottom:12px">
-      <div style="font-family:'Space Mono',monospace;font-size:10px;color:var(--gold);letter-spacing:.15em;margin-bottom:4px">🏆 STYLE #${(certIdx%20)+1} of 100+</div>
-      <div style="font-family:'Playfair Display',serif;font-size:20px;color:var(--cream)">Your <em style="color:var(--gold)">Certificate</em></div>
-      <div style="font-size:11px;color:var(--grey);margin-top:3px">Every calculation = a different design</div>
-    </div>
-    ${buildCert(lastName,lastTotal)}`;
-  document.getElementById('certActions').innerHTML=`
-    <button onclick="screenshotCert()" style="background:linear-gradient(135deg,var(--gold),#A0780D);color:#1A0A0A;font-family:'Space Mono',monospace;font-size:11px;font-weight:700;padding:10px 18px;border-radius:100px;border:none;cursor:none;text-transform:uppercase">📸 Screenshot</button>
-    <button onclick="copyCertTxt()" style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.15);color:var(--cream);font-family:'Space Mono',monospace;font-size:11px;padding:10px 16px;border-radius:100px;cursor:none">📋 Copy Text</button>
-    <button onclick="certIdx++;openCertModal()" style="background:rgba(192,57,43,.15);border:1px solid rgba(192,57,43,.3);color:var(--rl);font-family:'Space Mono',monospace;font-size:11px;padding:10px 16px;border-radius:100px;cursor:none">🎲 New Style</button>`;
-  document.getElementById('certModal').classList.add('show');
-}
-
-function closeCert(){document.getElementById('certModal').classList.remove('show');}
-document.getElementById('certModal').addEventListener('click',function(e){if(e.target===this)closeCert();});
-
-// Hook cert buy button to open modal preview after Cashfree
-document.addEventListener('DOMContentLoaded',()=>{
-  const btn=document.getElementById('certBuyBtn');
-  if(btn){
-    btn.addEventListener('click',()=>{
-      sessionStorage.setItem('certPay','1');
-      // Cashfree opens in new tab, we show modal here as preview
-      setTimeout(()=>{if(lastTotal>0)openCertModal();},600);
-    });
-  }
-});
-
-// VERDICTS
-const VD=['MINOR EMOTIONAL EXPENSE','NOTABLE FINANCIAL SACRIFICE','SIGNIFICANT ROMANTIC DAMAGE','CERTIFIED DISASTER','CATASTROPHIC INVESTMENT LOSS','COMPLETE FINANCIAL ANNIHILATION'];
-function getV(a){return VD[a<5000?0:a<20000?1:a<50000?2:a<100000?3:a<200000?4:5];}
-function getROI(a){return a<5000?{p:72,l:'72% — Recoverable'}:a<20000?{p:48,l:'48% — Below average'}:a<50000?{p:28,l:'28% — Poor investment'}:a<100000?{p:15,l:'15% — Terrible ROI'}:a<200000?{p:6,l:'6% — Near zero'}:{p:1,l:'1% — Complete write-off'};}
-
-// MAIN CALCULATE
-function calculate(){
-  const months=parseInt(document.getElementById('mo').value)||0;
-  const dates=parseInt(document.getElementById('da').value)||0;
-  const gifts=parseInt(document.getElementById('gi').value)||0;
-  const trips=parseInt(document.getElementById('tr').value)||0;
-  const calls=parseInt(document.getElementById('ca').value)||0;
-  const fl=parseInt(document.getElementById('fl2').value)||0;
-  const name=document.getElementById('un').value.trim()||'You';
-  const dc=months*dates,cc=months*calls,total=dc+gifts+trips+cc+fl;
-  if(!total){showToast('Add at least one amount first 😅');return;}
-  lastTotal=total;lastName=name;
-
-  // Pick random roast
-  lastRoastIdx=Math.floor(Math.random()*ROASTS.length);
-  document.getElementById('roastTxt').textContent=ROASTS[lastRoastIdx](total);
-  document.getElementById('verdict').textContent=getV(total);
-  document.getElementById('amt').textContent=fmt(total);
-
-  // Breakdown
-  document.getElementById('bkGrid').innerHTML=[
-    {i:'🍽️',v:fmt(dc),l:'Dates'},{i:'🎁',v:fmt(gifts),l:'Gifts'},
-    {i:'✈️',v:fmt(trips),l:'Trips'},{i:'📱',v:fmt(cc),l:'Calls'},
-    {i:'🌹',v:fmt(fl),l:'Treats'},{i:'📅',v:months+(months==1?' mo':' mos'),l:'Duration'},
-  ].map(b=>`<div class="bk"><div class="bk-i">${b.i}</div><div class="bk-v">${b.v}</div><div class="bk-l">${b.l}</div></div>`).join('');
-
-  // Equivalents
-  document.getElementById('eqItems').innerHTML=getEquivs(total).map(e=>`<span class="eq-item">${e}</span>`).join('');
-
-  const roi=getROI(total);
-  document.getElementById('roiTxt').textContent=roi.l;
-  setTimeout(()=>document.getElementById('roiF').style.width=roi.p+'%',200);
-
-  // Cert preview
-  document.getElementById('cpName').textContent=name;
-  document.getElementById('cpAmt').textContent=fmt(total);
-  document.getElementById('ctQ').textContent=CQ[Math.floor(Math.random()*CQ.length)];
-  certIdx++;
-
-  const r=document.getElementById('result');
-  r.style.display='block';
-  r.scrollIntoView({behavior:'smooth',block:'start'});
-  burst();
-}
-
-function refreshRoast(){
-  if(!lastTotal)return;
-  let idx=Math.floor(Math.random()*ROASTS.length);
-  while(idx===lastRoastIdx&&ROASTS.length>1)idx=Math.floor(Math.random()*ROASTS.length);
-  lastRoastIdx=idx;
-  document.getElementById('roastTxt').textContent=ROASTS[idx](lastTotal);
-  document.getElementById('eqItems').innerHTML=getEquivs(lastTotal).map(e=>`<span class="eq-item">${e}</span>`).join('');
-  showToast('Fresh roast loaded 🔥');
-}
-
-function recalc(){
-  document.getElementById('result').style.display='none';
-  document.getElementById('roiF').style.width='0%';
-  document.getElementById('calculator').scrollIntoView({behavior:'smooth'});
-}
-
-function screenshotCert(){showToast('📸 Long-press or screenshot to save your certificate!');}
-function copyCertTxt(){
-  navigator.clipboard.writeText(`🏆 OFFICIAL CERTIFICATE OF ROMANTIC LOSS\n\nThis certifies that ${lastName} has wasted ${fmt(lastTotal)} on someone who did not deserve it.\n\nIssued by BreakupBudget.pages.dev\n@breakupbudget`).then(()=>showToast('Certificate text copied! Post on Instagram 📸'));
-}
-
-function copyInstaCap(){
-  navigator.clipboard.writeText(`💔 I just found out I wasted ${fmt(lastTotal)} on my ex.\n\nThere's a free calculator for this now 👇\nbreakupbudget.pages.dev\n\n@breakupbudget #breakupbudget #exmath #heartbreak #relatable #IndianDating`).then(()=>showToast('Caption copied! Tag @breakupbudget 📸'));
-}
-
-function getShareTxt(){return `💔 I used BreakupBudget and found out I wasted ${fmt(lastTotal)} on my ex.\n\n${getEquivs(lastTotal)[0]||''}\n\nCalculate yours 👇\nbreakupbudget.pages.dev`;}
-function shareWA(){window.open('https://wa.me/?text='+encodeURIComponent(getShareTxt()),'_blank');}
-function shareTW(){window.open('https://twitter.com/intent/tweet?text='+encodeURIComponent(`💔 I wasted ${fmt(lastTotal)} on my ex. BreakupBudget told me the truth.\n\nbreakupbudget.pages.dev @breakupbudget`),'_blank');}
-function copyRes(){navigator.clipboard.writeText(getShareTxt()).then(()=>showToast('Copied! Send it everywhere 😈'));}
-function emailSub(e){e.preventDefault();showToast('🎉 Guide sent! Check your inbox.');e.target.querySelector('input').value='';e.target.querySelector('button').textContent='✓ Sent!';}
-
-function showToast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}
-
-function burst(){
-  const cols=['#C0392B','#E74C3C','#D4A017','#F5EFE6'];
-  for(let i=0;i<32;i++){
-    const el=document.createElement('div');
-    el.style.cssText=`position:fixed;top:50%;left:50%;width:${4+Math.random()*7}px;height:${4+Math.random()*7}px;background:${cols[i%4]};border-radius:${Math.random()>.5?'50%':'2px'};pointer-events:none;z-index:9990;transition:all ${.8+Math.random()*.8}s cubic-bezier(0,.5,.5,1);`;
-    document.body.appendChild(el);
-    requestAnimationFrame(()=>{const a=Math.random()*Math.PI*2,d=100+Math.random()*200;el.style.transform=`translate(${Math.cos(a)*d}px,${Math.sin(a)*d}px)`;el.style.opacity='0';});
-    setTimeout(()=>el.remove(),1600);
-  }
-}
-
-// MARQUEE
-const stories=[
-  {a:'₹87,400',t:'Took her to Manali, Goa, and 3 anniversary dinners. She left for her office friend.',n:'— Rohit, Mumbai'},
-  {a:'₹34,200',t:'2 years of weekend dates. "Not ready for commitment." Sure.',n:'— Priya, Delhi'},
-  {a:'₹1,23,000',t:'iPhone, gold chain, Dubai trip. He said I was "too nice." I agree. Too nice and too broke.',n:'— Arjun, Bangalore'},
-  {a:'₹12,800',t:'Only 4 months. Red flags were there. I thought they were decorations.',n:'— Sneha, Pune'},
-  {a:'₹67,500',t:'She said money doesn\'t matter in love. Turns out it matters when she leaves.',n:'— Karan, Hyderabad'},
-  {a:'₹2,45,000',t:'3 years, 2 cities, 1 heartbreak. The math is simple. The healing is not.',n:'— Anonymous'},
-  {a:'₹19,600',t:'Budget relationship apparently. Still hurts like premium.',n:'— Meera, Chennai'},
-  {a:'₹54,300',t:'Calculated at 2am. Cried. Ordered biryani. Started healing.',n:'— Dev, Kolkata'},
-  {a:'₹38,900',t:'"We\'re just friends who go on dates." ₹38,900 of friendship.',n:'— Vikram, Jaipur'},
-  {a:'₹91,000',t:'He moved cities. Left the relationship. Kept the gifts.',n:'— Riya, Bhopal'},
-];
-const mq=document.getElementById('mqT');
-mq.innerHTML=[...stories,...stories].map(s=>`<div class="s-card"><div class="s-amt">${s.a}</div><div class="s-txt">${s.t}</div><div class="s-nm">${s.n}</div></div>`).join('');
-
-// FAQ
-document.getElementById('faqList').innerHTML=[
-  {q:'Is this accurate?',a:'As accurate as your memory and honesty allow. We calculate: (months × dates) + gifts + trips + calls + treats. The math is simple. The pain is complex.'},
-  {q:'Why do I feel personally attacked?',a:'Because math doesn\'t lie. Your heart did. This is financial therapy.'},
-  {q:'Can I calculate a current relationship?',a:'You absolute legend. Yes. But maybe wait until it ends. For everyone\'s sake.'},
-  {q:'What exactly is the certificate?',a:'A downloadable, beautiful, official document certifying your financial loss. 100+ unique designs — every calculation gives a different style. Post on Instagram, send to your ex, frame it on your wall.'},
-  {q:'Why does the roast and "what I could have bought" section change?',a:'It rotates so you feel the full weight of your decisions from multiple angles. Hit "↺ Hit me with another one" for a fresh roast.'},
-  {q:'How does the lucky draw work?',a:'Post your certificate on Instagram, tag @breakupbudget. Every 10 days we pick one person and send a surprise premium gift. Real gift. Announced on our Instagram page.'},
-  {q:'How do you make money?',a:'Tips (₹29–₹499), premium certificates (₹49), affiliate links, and Google Ads later. All clearly marked. Zero data selling.'},
-].map(f=>`<div class="faq-item" onclick="this.classList.toggle('open')"><div class="faq-q">${f.q}<span class="faq-ic">+</span></div><div class="faq-a">${f.a}</div></div>`).join('');
-</script>
+<!-- Scripts — order matters -->
+<script src="data.js"></script>
+<script src="cert.js"></script>
+<script src="logic.js"></script>
 </body>
 </html>
