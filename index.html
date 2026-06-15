@@ -6,6 +6,138 @@
 <title>BreakupBudget — How Much Did Love Cost You?</title>
 <meta name="description" content="Calculate exactly how much money you wasted on your ex. Free, brutal, and unbelievably accurate.">
 <link rel="stylesheet" href="style.css">
+<style>
+/* ── INSTA TEASER (shown before payment) ── */
+.insta-tease-strip {
+  margin-top: 20px;
+  background: linear-gradient(135deg,rgba(131,58,180,.1),rgba(253,29,29,.1),rgba(252,176,69,.08));
+  border: 1px solid rgba(253,29,29,.22);
+  border-radius: 18px;
+  padding: 20px 22px;
+  position: relative;
+  overflow: hidden;
+}
+.insta-tease-strip::before {
+  content:'';
+  position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,#833AB4,#FD1D1D,#FCB045);
+}
+.its-row {
+  display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+}
+.its-left { flex:1;min-width:200px; }
+.its-badge {
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(252,176,69,.1);border:1px solid rgba(252,176,69,.3);
+  border-radius:100px;padding:4px 12px;
+  font-size:10px;color:#FCCE45;font-family:var(--ff-mono);
+  margin-bottom:8px;letter-spacing:.05em;
+}
+.its-pulse {
+  width:5px;height:5px;border-radius:50%;
+  background:#FCCE45;animation:pulse 1.5s ease infinite;
+}
+.its-title {
+  font-family:var(--ff-serif);font-size:16px;
+  color:var(--cream);line-height:1.35;margin-bottom:4px;
+}
+.its-sub {
+  font-size:12px;color:var(--grey);line-height:1.5;
+}
+.its-right {
+  display:flex;flex-direction:column;gap:6px;align-items:flex-end;
+}
+.its-handle {
+  font-family:var(--ff-mono);font-size:13px;
+  color:#F77737;font-weight:700;
+}
+.its-btn {
+  display:inline-flex;align-items:center;gap:6px;
+  background:linear-gradient(135deg,#833AB4,#FD1D1D,#FCB045);
+  color:white;font-family:var(--ff-mono);font-size:11px;font-weight:700;
+  padding:9px 16px;border-radius:100px;border:none;cursor:none;
+  transition:all .2s;text-decoration:none;text-transform:uppercase;
+  letter-spacing:.04em;white-space:nowrap;
+}
+.its-btn:hover{transform:translateY(-2px);opacity:.9}
+.its-note {
+  font-family:var(--ff-mono);font-size:9px;
+  color:rgba(255,255,255,.2);letter-spacing:.04em;
+  text-align:right;
+}
+
+/* ── SCROLL NUDGE ── */
+.scroll-nudge {
+  text-align:center;margin-top:14px;
+  font-family:var(--ff-mono);font-size:11px;
+  color:var(--gold);letter-spacing:.08em;
+  animation:nudgeBounce 2s ease infinite;
+}
+@keyframes nudgeBounce {
+  0%,100%{transform:translateY(0);opacity:.7}
+  50%{transform:translateY(4px);opacity:1}
+}
+
+/* ── TEASE QUOTE (above lock) ── */
+.tease-quote {
+  font-family:var(--ff-serif);font-size:15px;font-style:italic;
+  color:var(--grey);text-align:center;
+  padding:14px 20px;margin:14px 0;
+  border-top:1px solid rgba(255,255,255,.06);
+  border-bottom:1px solid rgba(255,255,255,.06);
+  line-height:1.6;
+}
+.tease-quote em{color:var(--gold)}
+
+/* ── WHAT'S INSIDE — styled better ── */
+.inside-list { display:flex;flex-direction:column;gap:10px;margin:16px 0;text-align:left; }
+.inside-item {
+  display:flex;align-items:flex-start;gap:12px;
+  padding:10px 14px;
+  background:rgba(255,255,255,.03);
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:12px;
+}
+.inside-item-icon{font-size:18px;flex-shrink:0;margin-top:1px}
+.inside-item span{font-size:13px;color:var(--grey);line-height:1.45}
+.inside-item span b{color:var(--cream);font-weight:500}
+
+/* ── PAY BUTTON SECTION ── */
+.pay-section {
+  margin-top:20px;
+  padding:22px;
+  background:rgba(212,160,23,.06);
+  border:1px solid rgba(212,160,23,.2);
+  border-radius:18px;
+  text-align:center;
+}
+.pay-section-title {
+  font-family:var(--ff-serif);font-size:20px;
+  color:var(--cream);margin-bottom:6px;line-height:1.35;
+}
+.pay-section-title em{color:var(--gold);font-style:italic}
+.pay-section-sub {
+  font-size:13px;color:var(--grey);
+  margin-bottom:18px;line-height:1.55;
+}
+.pay-price-tag {
+  display:inline-flex;align-items:baseline;gap:4px;
+  margin-bottom:14px;
+}
+.pay-price-big {
+  font-family:var(--ff-serif);font-size:48px;
+  font-weight:900;color:var(--gold);line-height:1;
+}
+.pay-price-label {
+  font-family:var(--ff-mono);font-size:12px;
+  color:var(--grey);letter-spacing:.05em;
+}
+.pay-hint{
+  font-family:var(--ff-mono);font-size:10px;
+  color:rgba(255,255,255,.18);margin-top:8px;
+  text-align:center;letter-spacing:.04em;
+}
+</style>
 </head>
 <body>
 
@@ -14,31 +146,26 @@
 <div id="toast"></div>
 <div id="hearts-container"></div>
 
-<!-- ═══════════ CERTIFICATE MODAL ═══════════ -->
+<!-- ═══ CERTIFICATE MODAL ═══ -->
 <div class="modal-overlay" id="cert-modal">
   <div class="modal-box">
     <button class="modal-close" onclick="closeCertModal()">✕</button>
     <div id="cert-modal-card"></div>
     <div class="cert-actions" id="cert-modal-actions"></div>
-    <div class="cert-share-hint">📸 SCREENSHOT THIS · SHARE ON INSTAGRAM · TAG @BREAKUPBUDGET</div>
+    <div class="cert-share-hint">📸 SCREENSHOT · SHARE ON INSTAGRAM · TAG @BREAKUPBUDGET</div>
   </div>
 </div>
 
-<!-- ═══════════ HERO ═══════════ -->
+<!-- ═══ HERO ═══ -->
 <section class="hero">
   <div class="hero-bg"></div>
-  <div class="hero-badge">
-    <div class="hero-badge-dot"></div>
-    Free · 60 Seconds · Brutally Honest
-  </div>
+  <div class="hero-badge"><div class="hero-badge-dot"></div>Free · 60 Seconds · Brutally Honest</div>
   <h1 class="hero-title">
     <span class="t1">How Much Did</span>
     <span class="t2">Love Cost You?</span>
   </h1>
   <p class="hero-subtitle">Enter your relationship details. We calculate exactly how many rupees you threw into the void. No mercy. Only math.</p>
-  <div class="hero-cta">
-    <a href="#calculator" class="btn-primary">💸 Calculate My Damage</a>
-  </div>
+  <div class="hero-cta"><a href="#calculator" class="btn-primary">💸 Calculate My Damage</a></div>
   <div class="hero-stats">
     <div class="hstat"><div class="hstat-n" id="stat-users">0</div><div class="hstat-l">Heartbroken Users</div></div>
     <div class="hstat-div"></div>
@@ -48,13 +175,11 @@
   </div>
 </section>
 
-<!-- ═══════════ CALCULATOR ═══════════ -->
+<!-- ═══ CALCULATOR ═══ -->
 <section id="calculator">
   <div class="section-eyebrow">The Damage Assessment</div>
   <h2 class="section-title">Enter The <em>Crime Scene</em></h2>
-
   <div class="calc-card">
-
     <div class="field-group">
       <div class="field-label">📅 Relationship Duration</div>
       <div class="range-wrap">
@@ -62,7 +187,6 @@
         <input type="range" class="range-input" id="range-months" min="1" max="120" value="12">
       </div>
     </div>
-
     <div class="field-group">
       <div class="field-label">🍽️ Monthly Date Spending (₹)</div>
       <div class="range-wrap">
@@ -70,7 +194,6 @@
         <input type="range" class="range-input" id="range-dates" min="0" max="20000" step="500" value="2000">
       </div>
     </div>
-
     <div class="field-row">
       <div class="field-group">
         <div class="field-label">🎁 Total Gifts (₹)</div>
@@ -81,7 +204,6 @@
         <input type="number" class="field-input" id="inp-trips" placeholder="e.g. 15000" min="0">
       </div>
     </div>
-
     <div class="field-row">
       <div class="field-group">
         <div class="field-label">📱 Calls & Data (₹)</div>
@@ -92,64 +214,91 @@
         <input type="number" class="field-input" id="inp-flowers" placeholder="e.g. 2000" min="0">
       </div>
     </div>
-
     <div class="field-group">
       <div class="field-label">😊 Your Name (for the certificate)</div>
       <input type="text" class="field-input" id="inp-name" placeholder="Your name">
     </div>
-
     <div class="divider"></div>
     <button class="calc-submit" onclick="calculate()">💔 Reveal My Financial Trauma</button>
   </div>
 </section>
 
-<!-- ═══════════ RESULT ═══════════ -->
+<!-- ═══ RESULT ═══ -->
 <section id="result">
   <div class="result-card">
     <div class="result-inner">
 
-      <!-- ═══ PHASE 1: locked tease ═══ -->
+      <!-- ══ PHASE 1: locked ══ -->
       <div id="phase1">
+
+        <!-- Big number -->
         <div class="verdict-label" id="result-verdict">CONFIRMED FINANCIAL DISASTER</div>
         <div class="big-amount" id="result-amount">₹0</div>
         <div class="amount-sub">wasted on someone who probably forgot your birthday</div>
 
+        <!-- Roast -->
         <div class="roast-box">
           <span id="roast-text"></span>
           <div class="roast-refresh" onclick="refreshRoast()">↺ Hit me with another one</div>
         </div>
 
-        <div class="tease-section">
-          <div class="tease-headline">Wait — <em>want to know what you could have done</em> with this money?</div>
-          <div class="tease-body">The full breakdown, 50+ things you could have bought instead, your official Relationship ROI score, your Heartbreak Horoscope, AND your one-of-a-kind shareable certificate — all locked behind one small decision.</div>
-
-          <div class="blur-grid" id="blur-grid"></div>
-          <div class="blur-pills" id="blur-pills"></div>
-
-          <div class="lock-wrap">
-            <div class="lock-icon">🔐</div>
-            <div class="lock-label">Unlock Everything — ₹49</div>
-            <div class="lock-sublabel">Full breakdown · 50+ rotating "what you could have bought" · Your ROI score · Heartbreak Horoscope · PLUS your extraordinary shareable certificate in 100+ unique designs</div>
-          </div>
-
-          <div class="inside-list">
-            <div class="inside-item"><span class="inside-item-icon">📊</span><span><b>Full spending breakdown</b> — dates, gifts, trips, calls, flowers, all itemised</span></div>
-            <div class="inside-item"><span class="inside-item-icon">🛵</span><span><b>What you could have bought instead</b> — 50+ rotating items: Goa trips, a scooter, MacBook, surf lessons, more</span></div>
-            <div class="inside-item"><span class="inside-item-icon">📉</span><span><b>Your official Relationship ROI score</b> — prepare yourself</span></div>
-            <div class="inside-item"><span class="inside-item-icon">🔮</span><span><b>Your Heartbreak Horoscope</b> — your financial-romantic personality, revealed</span></div>
-            <div class="inside-item"><span class="inside-item-icon">🏆</span><span><b>Your one-of-a-kind certificate</b> — 100+ unique gorgeous designs that people genuinely beg to share</span></div>
-          </div>
-
-          <div class="pay-wrapper">
-            <a href="https://payments.cashfree.com/forms/breakupbudget" target="_blank" id="pay-main-btn" class="btn-gold" onclick="handlePayClick()">
-              🏆 See Everything + Get My Certificate — ₹49
-            </a>
-            <div class="pay-hint">UPI · Card · NetBanking · Instant unlock · Cashfree secure payment</div>
+        <!-- ══ INSTAGRAM TEASE — shown BEFORE lock ══
+             Psychology: they imagine posting BEFORE deciding to pay.
+             Seeing the lucky draw makes them want the certificate first. -->
+        <div class="insta-tease-strip">
+          <div class="its-row">
+            <div class="its-left">
+              <div class="its-badge"><div class="its-pulse"></div>Lucky Draw · Every 10 Days · Real Gifts</div>
+              <div class="its-title">Post your certificate on Instagram.<br><em style="color:#FCCE45">Win a Premium Gift.</em></div>
+              <div class="its-sub">Every 10 days we pick one person who tags @breakupbudget and send them a real surprise gift. Unlock your certificate below to participate.</div>
+            </div>
+            <div class="its-right">
+              <span class="its-handle">@breakupbudget</span>
+              <a href="https://www.instagram.com/breakupbudget" target="_blank" class="its-btn">📸 Follow Us</a>
+              <div class="its-note">Tag us after unlocking ↓</div>
+            </div>
           </div>
         </div>
-      </div>
 
-      <!-- ═══ PHASE 2: full unlocked content ═══ -->
+        <!-- Scroll nudge -->
+        <div class="scroll-nudge">↓ Unlock your number below ↓</div>
+
+        <!-- Tease: blurred breakdown -->
+        <div class="blur-grid" id="blur-grid"></div>
+        <div class="blur-pills" id="blur-pills"></div>
+
+        <!-- Emotional tease quote -->
+        <div class="tease-quote">
+          "Your ex has already moved on. Your bank account has not.<br>
+          Isn't it time you at least <em>knew the number</em>?"
+        </div>
+
+        <!-- What's inside — styled cards -->
+        <div class="inside-list">
+          <div class="inside-item"><span class="inside-item-icon">📊</span><span><b>Full spending breakdown</b> — every category itemised with exact amounts</span></div>
+          <div class="inside-item"><span class="inside-item-icon">🛵</span><span><b>50+ things you could have bought instead</b> — Goa trip, MacBook, biryani for a year, more. Rotates every time.</span></div>
+          <div class="inside-item"><span class="inside-item-icon">📉</span><span><b>Your official Relationship ROI score</b> — with a visual bar. Prepare yourself.</span></div>
+          <div class="inside-item"><span class="inside-item-icon">🔮</span><span><b>Your Heartbreak Horoscope</b> — your financial-romantic personality sign</span></div>
+          <div class="inside-item"><span class="inside-item-icon">🏆</span><span><b>Your one-of-a-kind certificate</b> — 100+ unique designs. People screenshot and share these on Instagram every day.</span></div>
+        </div>
+
+        <!-- Pay section -->
+        <div class="pay-section">
+          <div class="pay-section-title">See Everything +<br><em>Get Your Certificate</em></div>
+          <div class="pay-section-sub">One small payment. Instant unlock. A certificate so beautiful people will ask you where you got it.</div>
+          <div class="pay-price-tag">
+            <div class="pay-price-big">₹49</div>
+            <div class="pay-price-label">one-time · instant</div>
+          </div>
+          <a href="https://payments.cashfree.com/forms/breakupbudget" target="_blank" id="pay-main-btn" class="btn-gold" onclick="handlePayClick()">
+            🏆 Unlock My Certificate — ₹49
+          </a>
+          <div class="pay-hint">UPI · Card · NetBanking · Cashfree secure · Instant unlock after payment</div>
+        </div>
+
+      </div><!-- end phase1 -->
+
+      <!-- ══ PHASE 2: full unlocked content ══ -->
       <div id="phase2">
         <div class="verdict-label" id="p2-verdict">CONFIRMED FINANCIAL DISASTER</div>
         <div class="big-amount" id="p2-amount">₹0</div>
@@ -173,95 +322,97 @@
         </div>
 
         <!-- Heartbreak Horoscope -->
-        <div class="tease-section" id="horoscope-section" style="display:none; text-align:center; margin-top:24px"></div>
+        <div class="tease-section" id="horoscope-section" style="display:none;text-align:center;margin-top:24px"></div>
 
         <!-- Cert reveal -->
         <div class="cert-reveal-section" id="cert-reveal-section">
           <div style="font-family:var(--ff-mono);font-size:10px;color:var(--gold);letter-spacing:.15em;text-transform:uppercase;margin-bottom:6px">🏆 Your Certificate Is Ready</div>
           <div style="font-family:var(--ff-serif);font-size:22px;color:var(--cream);margin-bottom:6px">Your <em style="color:var(--gold)">Certificate</em> of Romantic Loss</div>
-          <div style="font-size:13px;color:var(--grey);margin-bottom:16px;line-height:1.5">100+ unique designs. Every person gets a different one. People screenshot and post these constantly.</div>
+          <div style="font-size:13px;color:var(--grey);margin-bottom:16px;line-height:1.5">100+ unique designs. Every person gets a different one. People post these on Instagram every day.</div>
           <button class="btn-gold" onclick="openCertModal()" style="animation:none">🎨 Open My Certificate</button>
-          <div style="font-size:11px;color:rgba(255,255,255,.2);font-family:var(--ff-mono);margin-top:8px">Each calculation = a different gorgeous design · Screenshot & share</div>
+          <div style="font-size:11px;color:rgba(255,255,255,.2);font-family:var(--ff-mono);margin-top:8px">Screenshot → Post on Instagram → Tag @breakupbudget → Win lucky draw 🎁</div>
         </div>
-      </div>
 
-      <!-- ═══ INSTAGRAM ═══ -->
-      <div class="insta-section" id="section-insta" style="display:none">
-        <div class="lucky-badge"><div class="lucky-dot"></div>Lucky Draw · Every 10 Days · Real Gifts</div>
-        <div class="insta-heading">Share Your Certificate.<br>Win a <em style="color:#FCCE45">Premium Gift.</em></div>
-        <div class="insta-body">Post your certificate, tag us — every 10 days we pick one lucky heartbroken soul and send them a surprise premium gift. Real. Announced on our page.</div>
-        <span class="insta-handle">@breakupbudget</span>
-        <div class="insta-buttons">
-          <a href="https://www.instagram.com/breakupbudget" target="_blank" class="btn-insta-main">📸 Tag @breakupbudget</a>
-          <button class="btn-ghost" onclick="copyInstaCap()">📋 Copy Caption</button>
+        <!-- Instagram (full version — after unlock) -->
+        <div class="insta-section" id="section-insta" style="display:none">
+          <div class="lucky-badge"><div class="lucky-dot"></div>Lucky Draw · Every 10 Days · Real Gifts</div>
+          <div class="insta-heading">Share Your Certificate.<br>Win a <em style="color:#FCCE45">Premium Gift.</em></div>
+          <div class="insta-body">Post your certificate screenshot on Instagram, tag us — every 10 days we pick one lucky heartbroken soul and send a real surprise gift. Announced on our page.</div>
+          <span class="insta-handle">@breakupbudget</span>
+          <div class="insta-buttons">
+            <a href="https://www.instagram.com/breakupbudget" target="_blank" class="btn-insta-main">📸 Tag @breakupbudget</a>
+            <button class="btn-ghost" onclick="copyInstaCap()">📋 Copy Caption</button>
+          </div>
+          <div class="lucky-info-box">
+            <b>🏆 How to win:</b> Post your certificate → Tag @breakupbudget → We DM the winner every 10 days.<br>
+            <b>🤝 Want to collab?</b> DM us on Instagram if you have an audience.<br>
+            <b>🎁 Next draw:</b> <span id="next-draw-date">Loading...</span>
+          </div>
         </div>
-        <div class="lucky-info-box">
-          <b>🏆 Win every 10 days:</b> Post certificate → Tag @breakupbudget → We DM the winner. Open for collabs — DM us if you have an audience.<br>
-          <b>🎁 Next draw:</b> <span id="next-draw-date">Loading...</span>
+
+        <!-- Tip jar -->
+        <div class="tip-section" id="section-tip" style="display:none">
+          <div class="tip-heading">🧻 Built at 2am on heartbreak & bad decisions</div>
+          <div class="tip-body">The creator survived their own expensive relationship to build this. If it made you feel something — return the favour.</div>
+          <div class="tip-grid">
+            <a href="https://payments.cashfree.com/forms/onetissue" target="_blank" class="tip-btn">₹29<br><span style="font-size:10px;opacity:.6">One tissue 🧻</span></a>
+            <a href="https://payments.cashfree.com/forms/neww" target="_blank" class="tip-btn">₹99<br><span style="font-size:10px;opacity:.6">Coffee ☕</span></a>
+            <a href="https://payments.cashfree.com/forms/bigg" target="_blank" class="tip-btn">₹199<br><span style="font-size:10px;opacity:.6">Biryani 🍛</span></a>
+            <a href="https://payments.cashfree.com/forms/biggest" target="_blank" class="tip-btn">₹499<br><span style="font-size:10px;opacity:.6">Big love 💛</span></a>
+          </div>
+          <div class="tip-note">100% goes to the developer · Pure gratitude</div>
         </div>
-      </div>
 
-      <!-- ═══ TIP JAR ═══ -->
-      <div class="tip-section" id="section-tip" style="display:none">
-        <div class="tip-heading">🧻 Built at 2am on heartbreak & bad decisions</div>
-        <div class="tip-body">The creator survived their own expensive relationship to build this for you. If it made you feel something — return the favour.</div>
-        <div class="tip-grid">
-          <a href="https://payments.cashfree.com/forms/onetissue" target="_blank" class="tip-btn">₹29<br><span style="font-size:10px;opacity:.6">One tissue 🧻</span></a>
-          <a href="https://payments.cashfree.com/forms/neww" target="_blank" class="tip-btn">₹99<br><span style="font-size:10px;opacity:.6">Coffee ☕</span></a>
-          <a href="https://payments.cashfree.com/forms/bigg" target="_blank" class="tip-btn">₹199<br><span style="font-size:10px;opacity:.6">Biryani 🍛</span></a>
-          <a href="https://payments.cashfree.com/forms/biggest" target="_blank" class="tip-btn">₹499<br><span style="font-size:10px;opacity:.6">Big love 💛</span></a>
+        <!-- Domain fund -->
+        <div class="domain-section" id="section-domain" style="display:none">
+          <div style="font-size:26px;margin-bottom:8px">🌐</div>
+          <div class="domain-heading">Help This Site Grow 💔</div>
+          <div class="domain-body">Running on a free domain. If this made you feel seen — help us get a real home. Pay whatever your heart says.</div>
+          <a href="https://payments.cashfree.com/forms/buynewdomain" target="_blank" class="btn-domain">💸 Support This Site — Any Amount</a>
+          <div class="domain-note">Custom amount · Every rupee counts 🙏</div>
         </div>
-        <div class="tip-note">100% goes to the developer · No platform cut · Pure gratitude</div>
-      </div>
 
-      <!-- ═══ DOMAIN FUND ═══ -->
-      <div class="domain-section" id="section-domain" style="display:none">
-        <div style="font-size:26px;margin-bottom:8px">🌐</div>
-        <div class="domain-heading">Help This Site Grow 💔</div>
-        <div class="domain-body">This site runs on a free domain. If it made you laugh, cry, or feel seen — help us level up. Pay whatever your heart says. No fixed amount. No pressure. Just love.</div>
-        <a href="https://payments.cashfree.com/forms/buynewdomain" target="_blank" class="btn-domain">💸 Support This Site — Any Amount</a>
-        <div class="domain-note">Custom amount · Cashfree secure · Every rupee means everything 🙏</div>
-      </div>
-
-      <!-- ═══ AFFILIATE ═══ -->
-      <div class="aff-section" id="section-aff" style="display:none">
-        <div class="aff-eyebrow">💡 Ready to invest better?</div>
-        <div class="aff-grid">
-          <a href="#" target="_blank" class="aff-card"><div class="aff-icon">🐝</div><div class="aff-name">Try Bumble</div><div class="aff-desc">Someone who actually texts back.</div><div class="aff-cta">Start free →</div></a>
-          <a href="#" target="_blank" class="aff-card"><div class="aff-icon">🏠</div><div class="aff-name">New Flat?</div><div class="aff-desc">Moving out? NoBroker, zero brokerage.</div><div class="aff-cta">Search →</div></a>
-          <a href="#" target="_blank" class="aff-card"><div class="aff-icon">🧠</div><div class="aff-name">Talk to Someone</div><div class="aff-desc">YourDOST — first session free.</div><div class="aff-cta">Book →</div></a>
-          <a href="#" target="_blank" class="aff-card"><div class="aff-icon">📦</div><div class="aff-name">Treat Yourself</div><div class="aff-desc">You earned it. Shop what stays.</div><div class="aff-cta">Shop →</div></a>
+        <!-- Affiliate -->
+        <div class="aff-section" id="section-aff" style="display:none">
+          <div class="aff-eyebrow">💡 Ready to invest better?</div>
+          <div class="aff-grid">
+            <a href="#" target="_blank" class="aff-card"><div class="aff-icon">🐝</div><div class="aff-name">Try Bumble</div><div class="aff-desc">Someone who actually texts back.</div><div class="aff-cta">Start free →</div></a>
+            <a href="#" target="_blank" class="aff-card"><div class="aff-icon">🏠</div><div class="aff-name">New Flat?</div><div class="aff-desc">NoBroker — zero brokerage.</div><div class="aff-cta">Search →</div></a>
+            <a href="#" target="_blank" class="aff-card"><div class="aff-icon">🧠</div><div class="aff-name">Talk to Someone</div><div class="aff-desc">YourDOST — first session free.</div><div class="aff-cta">Book →</div></a>
+            <a href="#" target="_blank" class="aff-card"><div class="aff-icon">📦</div><div class="aff-name">Treat Yourself</div><div class="aff-desc">You earned it. Shop what stays.</div><div class="aff-cta">Shop →</div></a>
+          </div>
         </div>
-      </div>
 
-      <!-- ═══ SHARE ═══ -->
-      <div class="share-section" id="section-share" style="display:none">
-        <div class="share-label">📢 Make Your Ex Feel This</div>
-        <div class="share-buttons">
-          <button class="btn-share bs-wa" onclick="shareWhatsApp()">💬 WhatsApp</button>
-          <button class="btn-share bs-tw" onclick="shareTwitter()">𝕏 Twitter</button>
-          <button class="btn-share bs-cp" onclick="copyShareText()">📋 Copy</button>
+        <!-- Share -->
+        <div class="share-section" id="section-share" style="display:none">
+          <div class="share-label">📢 Make Your Ex Feel This</div>
+          <div class="share-buttons">
+            <button class="btn-share bs-wa" onclick="shareWhatsApp()">💬 WhatsApp</button>
+            <button class="btn-share bs-tw" onclick="shareTwitter()">𝕏 Twitter</button>
+            <button class="btn-share bs-cp" onclick="copyShareText()">📋 Copy</button>
+          </div>
         </div>
-      </div>
 
-      <button class="btn-recalc" onclick="recalculate()">↺ Calculate Another Disaster</button>
+        <button class="btn-recalc" onclick="recalculate()">↺ Calculate Another Disaster</button>
+      </div><!-- end phase2 -->
+
     </div>
   </div>
 </section>
 
-<!-- ═══════════ STORIES MARQUEE ═══════════ -->
+<!-- ═══ STORIES MARQUEE ═══ -->
 <section class="stories-section">
   <div class="section-eyebrow">Real Confessions</div>
-  <h2 class="section-title" style="font-size:clamp(22px,4vw,34px); margin-bottom:32px">They Did The Math.<br><em>You're Not Alone.</em></h2>
+  <h2 class="section-title" style="font-size:clamp(22px,4vw,34px);margin-bottom:32px">They Did The Math.<br><em>You're Not Alone.</em></h2>
   <div class="marquee-wrap"><div class="marquee-track" id="marquee-track"></div></div>
 </section>
 
-<!-- ═══════════ EMAIL CAPTURE ═══════════ -->
-<section style="max-width:680px; margin:0 auto; padding:0 20px 60px">
+<!-- ═══ EMAIL ═══ -->
+<section style="max-width:680px;margin:0 auto;padding:0 20px 60px">
   <div class="tip-section">
     <div class="tip-heading">📬 Free <em style="color:#1DA1F2">Glow-Up Finance Guide</em></div>
     <div class="tip-body">7 money moves to make after a breakup. Free. No spam.</div>
-    <form onsubmit="handleEmailSubmit(event)" style="display:flex; gap:10px">
+    <form onsubmit="handleEmailSubmit(event)" style="display:flex;gap:10px">
       <input type="email" class="field-input" placeholder="your@email.com" required style="flex:1">
       <button type="submit" class="btn-ghost" style="white-space:nowrap">Send →</button>
     </form>
@@ -269,22 +420,21 @@
   </div>
 </section>
 
-<!-- ═══════════ FAQ ═══════════ -->
+<!-- ═══ FAQ ═══ -->
 <section class="faq-section">
   <div class="section-eyebrow">Questions</div>
-  <h2 class="section-title" style="font-size:clamp(22px,4vw,34px); margin-bottom:32px">You <em>Asked</em></h2>
+  <h2 class="section-title" style="font-size:clamp(22px,4vw,34px);margin-bottom:32px">You <em>Asked</em></h2>
   <div id="faq-list"></div>
 </section>
 
-<!-- ═══════════ FOOTER ═══════════ -->
+<!-- ═══ FOOTER ═══ -->
 <footer>
   <div class="footer-brand">BreakupBudget<span>.pages.dev</span></div>
   <div>Made with 💔 for everyone who loved wrong · © 2025</div>
-  <div style="margin-top:6px; opacity:.6">Not financial advice. Definitely emotional advice.</div>
+  <div style="margin-top:6px;opacity:.6">Not financial advice. Definitely emotional advice.</div>
   <div style="margin-top:8px"><a href="https://instagram.com/breakupbudget" target="_blank">@breakupbudget on Instagram</a></div>
 </footer>
 
-<!-- Scripts — order matters -->
 <script src="data.js"></script>
 <script src="cert.js"></script>
 <script src="logic.js"></script>
